@@ -1,4 +1,4 @@
-package store
+package oldstore
 
 import (
 	"fmt"
@@ -39,9 +39,8 @@ func NewStore() *Store {
 	if err != nil {
 		log.Fatal(err)
 		return nil
-
 	}
-
+	log.Println("Database connected.")
 	db.AutoMigrate(&model.Center{})
 	return &Store{
 		db: db,

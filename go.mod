@@ -3,7 +3,7 @@ module github.com/InsideCI/nego
 go 1.13
 
 require (
-	github.com/gorilla/mux v1.7.3
+	github.com/go-chi/chi v4.0.2+incompatible
 	github.com/jinzhu/gorm v1.9.11
 	github.com/joho/godotenv v1.3.0
 )
