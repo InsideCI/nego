@@ -2,11 +2,10 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 
-	"github.com/InsideCI/nego/handler"
-	"github.com/gorilla/mux"
+	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/middleware"
 )
 
 func helloWorld(w http.ResponseWriter, r *http.Request) {
@@ -15,13 +14,17 @@ func helloWorld(w http.ResponseWriter, r *http.Request) {
 
 // Init method first
 func Init(port string) {
-	handler := handler.NewHandler()
-	router := mux.NewRouter().StrictSlash(true)
 
-	router.HandleFunc("/students/{id}", handler.GetStudent).Methods("GET")
-	router.HandleFunc("/centers", handler.GetCenters).Methods("GET")
+	r := chi.NewRouter()
+	r.Use(middleware.RequestID)
+	r.Use(middleware.Logger)
 
-	log.Fatal(http.ListenAndServe(":"+port, router))
+	//centerHandler := handler.NewCenterHandler()
+	// r.Get("/centers", handler.Fetch)
+
+	//depHandler := handler.NewDepHandler()
+
+	http.ListenAndServe(":"+port, r)
 }
 
 func main() {
