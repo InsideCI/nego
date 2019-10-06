@@ -6,8 +6,13 @@ import (
 	"os"
 
 	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/postgres" //postgres
+
+	"github.com/InsideCI/nego/model"
 	"github.com/joho/godotenv"
 )
+
+// var db *gorm.DB
 
 // Store abstracts CRUD methods
 type Store struct {
@@ -23,20 +28,32 @@ func NewStore() *Store {
 	}
 
 	userName := os.Getenv("db_user")
-	userPassword := os.Getenv("db_pass")
+	userPass := os.Getenv("db_pass")
 	dbName := os.Getenv("db_name")
 	dbHost := os.Getenv("db_host")
+	dbPort := os.Getenv("db_port")
 
-	dbURI := fmt.Sprintf("host=%s dbname=%s user=%s password=%s  sslmode=disable", dbHost, dbName, userName, userPassword)
+	dbURI := fmt.Sprintf("host=%s port=%s dbname=%s user=%s password=%s  sslmode=disable", dbHost, dbPort, dbName, userName, userPass)
 
 	db, err := gorm.Open("postgres", dbURI)
+	if err != nil {
+		log.Fatal(err)
+		return nil
 
+	}
+
+	db.AutoMigrate(&model.Center{})
 	return &Store{
 		db: db,
 	}
 }
 
-// GetStudent returns a student name and course ID based on it's registration code.
-// func (s *Store) GetStudent() (*model.Student, error) {
-// 	return _, _
-// }
+// GetCenters returns all centers available on UFPB SIGAA.
+func (s *Store) GetCenters() []model.Center {
+	var centers []model.Center
+
+	fmt.Println("Finding centers.")
+	s.db.Find(&centers)
+
+	return centers
+}
