@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/InsideCI/nego/routes"
+	"github.com/InsideCI/nego/handler"
 	"github.com/gorilla/mux"
 )
 
@@ -13,14 +13,18 @@ func helloWorld(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Hello, world!")
 }
 
-func handleRequests() {
-	myRouter := mux.NewRouter().StrictSlash(true)
-	myRouter.HandleFunc("/students/{id}", routes.GetStudent).Methods("GET")
-	log.Fatal(http.ListenAndServe(":8081", myRouter))
+// Init method first
+func Init(port string) {
+	handler := handler.NewHandler()
+	router := mux.NewRouter().StrictSlash(true)
+
+	router.HandleFunc("/students/{id}", handler.GetStudent).Methods("GET")
+
+	log.Fatal(http.ListenAndServe(":"+port, router))
 }
 
 func main() {
-	fmt.Println("Go ORM tutorial.")
-
-	handleRequests()
+	port := "8081"
+	fmt.Printf("Listening on port: %s", port)
+	Init(port)
 }
