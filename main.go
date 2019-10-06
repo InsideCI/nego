@@ -19,12 +19,13 @@ func Init(port string) {
 	router := mux.NewRouter().StrictSlash(true)
 
 	router.HandleFunc("/students/{id}", handler.GetStudent).Methods("GET")
+	router.HandleFunc("/centers", handler.GetCenters).Methods("GET")
 
 	log.Fatal(http.ListenAndServe(":"+port, router))
 }
 
 func main() {
 	port := "8081"
-	fmt.Printf("Listening on port: %s", port)
+	fmt.Printf("Listening on port: %s\n", port)
 	Init(port)
 }
