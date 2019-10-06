@@ -17,9 +17,9 @@ func NewCenterRepository(db *gorm.DB) repository.CenterRepository {
 	}
 }
 
-func (p *postgresCenterRepository) Create(m *model.Center) (int64, error) {
-
-	return 0, nil
+func (p *postgresCenterRepository) Create(center *model.Center) (int, error) {
+	p.db.Create(&center)
+	return center.ID, nil
 }
 
 func (p *postgresCenterRepository) Fetch(num int64) ([]*model.Center, error) {
