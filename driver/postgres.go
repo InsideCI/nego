@@ -6,11 +6,12 @@ import (
 
 	"github.com/InsideCI/nego/model"
 	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/postgres" //postgres dialect
 )
 
 // DB wrappes available projet databases.
 type DB struct {
-	psql *gorm.DB
+	Psql *gorm.DB
 	//sqlserver *gorm.DB
 }
 
@@ -23,10 +24,11 @@ func ConnectPostgres(user, pass, name, host, port string) (*DB, error) {
 	if err != nil {
 		log.Fatal(err)
 	}
-
+	log.Println("Connected to PostgreSQL database; Starting migration..")
 	db.AutoMigrate(&model.Center{})
+	log.Println("Migration finished.")
 
 	return &DB{
-		psql: db,
+		Psql: db,
 	}, nil
 }
