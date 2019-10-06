@@ -13,3 +13,9 @@
 
 # Sensitive data
 *.env
+
+# VSCODE
+.vscode
+
+# Binary
+nego
