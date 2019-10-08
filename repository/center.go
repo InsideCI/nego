@@ -7,5 +7,5 @@ import (
 // CenterRepository abstract database CRUD methods for Center.
 type CenterRepository interface {
 	Create(p *model.Center) (int, error)
-	Fetch(num int64) ([]*model.Center, error)
+	Fetch(limit int) ([]*model.Center, error)
 }

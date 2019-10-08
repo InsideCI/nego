@@ -24,7 +24,7 @@ func (p *postgresCenterRepository) Create(center *model.Center) (id int, err err
 	return center.ID, nil
 }
 
-func (p *postgresCenterRepository) Fetch(num int64) (centers []*model.Center, err error) {
+func (p *postgresCenterRepository) Fetch(num int) (centers []*model.Center, err error) {
 	if err = p.db.Find(&centers).Error; err != nil {
 		return
 	}
