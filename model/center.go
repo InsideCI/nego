@@ -2,7 +2,7 @@ package model
 
 // Center abstracts a UFPB Center.
 type Center struct {
-	ID   int    `json:"id"`
+	ID   int    `json:"id" gorm:"PRIMARY_KEY"`
 	Nome string `json:"nome"`
 }
 
