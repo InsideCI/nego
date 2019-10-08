@@ -42,6 +42,7 @@ func Init(port string) {
 
 	centerHandler := handler.NewCenterHandler(db)
 	r.Post("/centers", centerHandler.Create)
+	r.Get("/centers", centerHandler.Fetch)
 
 	//depHandler := handler.NewDepHandler()
 

@@ -1,7 +1,8 @@
 package handler
 
 import (
-	"fmt"
+	"encoding/json"
+	"log"
 	"net/http"
 
 	"github.com/InsideCI/nego/driver"
@@ -22,13 +23,21 @@ func NewCenterHandler(driver *driver.DB) *Center {
 	}
 }
 
+// Create receives a body composed of an Center JSON data.s
 func (c *Center) Create(w http.ResponseWriter, r *http.Request) {
-
-	center := model.Center{
-		ID:   1321,
-		Nome: "eae comparças",
+	var center model.Center
+	if err := json.NewDecoder(r.Body).Decode(&center); err != nil {
+		log.Fatal(err)
 	}
-
 	c.repo.Create(&center)
-	fmt.Fprint(w, "User created.")
+	w.Write([]byte("OK"))
+}
+
+// Fetch returns an array containing exaclty the quantity of predefined entities.
+func (c *Center) Fetch(w http.ResponseWriter, r *http.Request) {
+	centers, err := c.repo.Fetch(10)
+	if err != nil {
+		log.Fatal(err)
+	}
+	json.NewEncoder(w).Encode(centers)
 }
