@@ -1,7 +1,9 @@
 package repository
 
-// Department abstracts CRUD methods for Department.
-type Department interface {
-	Create()
-	Fetch()
+import "github.com/InsideCI/nego/model"
+
+// DepartmentRepository abstracts CRUD methods for Department.
+type DepartmentRepository interface {
+	Create(d *model.Department) (int, error)
+	Fetch(limit int) ([]*model.Department, error)
 }
