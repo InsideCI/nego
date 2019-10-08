@@ -25,8 +25,8 @@ func ConnectPostgres(user, pass, name, host, port string) (*DB, error) {
 		log.Fatal(err)
 	}
 	log.Println("Connected to PostgreSQL database; Starting migration..")
-	db.AutoMigrate(&model.Center{})
-	log.Println("Migration finished.")
+	db.AutoMigrate(&model.Center{}, &model.Department{})
+	log.Println("Migration ended with no errors.")
 
 	return &DB{
 		Psql: db,
