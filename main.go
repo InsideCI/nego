@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -13,17 +12,10 @@ import (
 	"github.com/joho/godotenv"
 )
 
-func helloWorld(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello, world!")
-}
-
 // Init method first
 func Init(port string) {
 
-	r := chi.NewRouter()
-	r.Use(middleware.RequestID)
-	r.Use(middleware.Logger)
-
+	// Database init configurations
 	err := godotenv.Load("database.env")
 	if err != nil {
 		log.Fatal("Error loading .env file.")
@@ -40,13 +32,23 @@ func Init(port string) {
 		log.Fatal(err)
 	}
 
+	r := chi.NewRouter()
+	r.Use(middleware.RequestID)
+	r.Use(middleware.Logger)
+
 	centerHandler := handler.NewCenterHandler(db)
 	r.Post("/centers", centerHandler.Create)
 	r.Get("/centers", centerHandler.Fetch)
 
-	//depHandler := handler.NewDepHandler()
+	depHandler := handler.NewDepartmentHandler(db)
+	r.Post("/departments", depHandler.Create)
+	r.Get("/departments", depHandler.Fetch)
 
-	http.ListenAndServe(":"+port, r)
+	courseHandler := handler.NewCourseHandler(db)
+	r.Post("/courses", courseHandler.Create)
+	r.Get("/courses", courseHandler.Fetch)
+
+	log.Fatal(http.ListenAndServe(":"+port, r))
 }
 
 func main() {
