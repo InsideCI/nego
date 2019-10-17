@@ -2,24 +2,21 @@ package model
 
 import (
 	"encoding/json"
-
-	"github.com/jinzhu/gorm"
 )
 
 // Student abstracts a basic UFPB student.
 type Student struct {
-	gorm.Model
-	Matricula string `json:"matricula"`
+	Matricula int    `json:"matricula" gorm:"type:bigint;index:index_student_id;"`
 	Nome      string `json:"nome"`
-	CursoID   string `json:"cursoID"`
+	IDCurso   int    `json:"id_curso" gorm:"index:index_student_course"`
 }
 
 // NewStudent creates a new instance of a student for test purposes.
-func NewStudent(matricula string, nome string, cursoID string) *Student {
+func NewStudent(matricula int, nome string, idCurso int) *Student {
 	return &Student{
 		Matricula: matricula,
 		Nome:      nome,
-		CursoID:   cursoID,
+		IDCurso:   idCurso,
 	}
 }
 

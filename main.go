@@ -21,6 +21,7 @@ func Init(port string) {
 		log.Fatal("Error loading .env file.")
 	}
 
+	// Any .env file with following parameters will be compatible;
 	userName := os.Getenv("db_user")
 	userPass := os.Getenv("db_pass")
 	dbName := os.Getenv("db_name")
@@ -39,6 +40,8 @@ func Init(port string) {
 	centerHandler := handler.NewCenterHandler(db)
 	r.Post("/centers", centerHandler.Create)
 	r.Get("/centers", centerHandler.Fetch)
+	//r.Get("/centers/{id}/courses", centerHandler.Fetch)
+	//r.Get("/centers/{id}/departments", centerHandler.Fetch)
 
 	depHandler := handler.NewDepartmentHandler(db)
 	r.Post("/departments", depHandler.Create)
@@ -48,11 +51,15 @@ func Init(port string) {
 	r.Post("/courses", courseHandler.Create)
 	r.Get("/courses", courseHandler.Fetch)
 
+	studentHandler := handler.NewStudentHandler(db)
+	r.Post("/students", studentHandler.Create)
+	r.Get("/students", studentHandler.Fetch)
+
+	log.Printf("NEGO API started on port %s.\n", port)
 	log.Fatal(http.ListenAndServe(":"+port, r))
 }
 
 func main() {
 	port := "8081"
-	log.Printf("Starting server on port: %s\n", port)
 	Init(port)
 }
