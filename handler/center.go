@@ -27,7 +27,8 @@ func NewCenterHandler(driver *driver.DB) *Center {
 func (c *Center) Create(w http.ResponseWriter, r *http.Request) {
 	var center model.Center
 	if err := json.NewDecoder(r.Body).Decode(&center); err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 	c.repo.Create(&center)
 	w.Write([]byte("OK"))

@@ -27,7 +27,8 @@ func NewDepartmentHandler(driver *driver.DB) *Department {
 func (d *Department) Create(w http.ResponseWriter, r *http.Request) {
 	var dep model.Department
 	if err := json.NewDecoder(r.Body).Decode(&dep); err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 	d.repo.Create(&dep)
 	w.Write([]byte("OK"))
