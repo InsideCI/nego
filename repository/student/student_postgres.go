@@ -25,8 +25,16 @@ func (r *postgresStudentRespository) Create(student *model.Student) (magtricula 
 	return student.Matricula, nil
 }
 
-func (r *postgresStudentRespository) Fetch(limit int) (students []*model.Student, err error) {
+func (r *postgresStudentRespository) Fetch(limit ...int) (students []*model.Student, err error) {
 	if err = r.db.Find(&students).Error; err != nil {
+		return
+	}
+	return
+}
+
+func (r *postgresStudentRespository) FetchOne(registration int64) (student *model.Student, err error) {
+	var st model.Student
+	if err = r.db.First(&st, 11409558).Error; err != nil {
 		return
 	}
 	return

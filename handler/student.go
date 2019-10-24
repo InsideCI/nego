@@ -2,8 +2,10 @@ package handler
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/InsideCI/nego/driver"
 	"github.com/InsideCI/nego/model"
@@ -16,6 +18,7 @@ type Student struct {
 	repo repository.StudentRepository
 }
 
+// NewStudentHandler creates a new handler with a specific database engine.
 func NewStudentHandler(db *driver.DB) *Student {
 	return &Student{
 		repo: student.NewStudentRepository(db),
@@ -33,10 +36,22 @@ func (s *Student) Create(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Student) Fetch(w http.ResponseWriter, r *http.Request) {
-	students, err := s.repo.Fetch(10)
+	students, err := s.repo.Fetch()
 	if err != nil {
 		log.Println(err)
 		return
 	}
 	json.NewEncoder(w).Encode(students)
+}
+
+// FetchOne uses registration param as primary key search
+func (s *Student) FetchOne(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	registration := ctx.Value("registration")
+	reg, err := strconv.ParseInt(fmt.Sprintf("%v", registration), 10, 64)
+	if err != nil {
+		log.Fatal(err)
+	}
+	student, err := s.repo.FetchOne(reg)
+	err = json.NewEncoder(w).Encode(student)
 }
