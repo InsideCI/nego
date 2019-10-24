@@ -44,11 +44,11 @@ func (s *Student) Fetch(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(students)
 }
 
-// FetchOne uses registration param as primary key search
+// FetchOne uses id param as primary key search
 func (s *Student) FetchOne(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	registration := ctx.Value("registration")
-	reg, err := strconv.ParseInt(fmt.Sprintf("%v", registration), 10, 64)
+	id := ctx.Value("id")
+	reg, err := strconv.ParseInt(fmt.Sprintf("%v", id), 10, 64)
 	if err != nil {
 		log.Fatal(err)
 	}
