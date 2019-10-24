@@ -4,9 +4,11 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/InsideCI/nego/driver"
 	"github.com/InsideCI/nego/handler"
+	"github.com/InsideCI/nego/router"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/joho/godotenv"
@@ -36,6 +38,7 @@ func Init(port string) {
 	r := chi.NewRouter()
 	r.Use(middleware.RequestID)
 	r.Use(middleware.Logger)
+	r.Use(middleware.Timeout(5 * time.Second))
 
 	centerHandler := handler.NewCenterHandler(db)
 	r.Post("/centers", centerHandler.Create)
@@ -51,9 +54,7 @@ func Init(port string) {
 	r.Post("/courses", courseHandler.Create)
 	r.Get("/courses", courseHandler.Fetch)
 
-	studentHandler := handler.NewStudentHandler(db)
-	r.Post("/students", studentHandler.Create)
-	r.Get("/students", studentHandler.Fetch)
+	r.Route("/students", router.NewStudentRouter(db))
 
 	log.Printf("NEGO API started on port %s.\n", port)
 	log.Fatal(http.ListenAndServe(":"+port, r))
