@@ -17,5 +17,6 @@
 # VSCODE
 .vscode
 
-# Binary
+# IDE and binaries
 nego
+/.idea/
