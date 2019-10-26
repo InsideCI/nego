@@ -3,7 +3,6 @@ package main
 import (
 	"log"
 	"net/http"
-	"os"
 	"time"
 
 	"github.com/InsideCI/nego/driver"
@@ -23,14 +22,7 @@ func Init(port string) {
 		log.Fatal("Error loading .env file.")
 	}
 
-	// Any .env file with following parameters will be compatible;
-	userName := os.Getenv("db_user")
-	userPass := os.Getenv("db_pass")
-	dbName := os.Getenv("db_name")
-	dbHost := os.Getenv("db_host")
-	dbPort := os.Getenv("db_port")
-
-	db, err := driver.ConnectPostgres(userName, userPass, dbName, dbHost, dbPort)
+	databasesConnection, err := driver.CreateDatabasesConnections()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -40,21 +32,19 @@ func Init(port string) {
 	r.Use(middleware.Logger)
 	r.Use(middleware.Timeout(5 * time.Second))
 
-	centerHandler := handler.NewCenterHandler(db)
+	centerHandler := handler.NewCenterHandler(databasesConnection)
 	r.Post("/centers", centerHandler.Create)
 	r.Get("/centers", centerHandler.Fetch)
-	//r.Get("/centers/{id}/courses", centerHandler.Fetch)
-	//r.Get("/centers/{id}/departments", centerHandler.Fetch)
 
-	depHandler := handler.NewDepartmentHandler(db)
+	depHandler := handler.NewDepartmentHandler(databasesConnection)
 	r.Post("/departments", depHandler.Create)
 	r.Get("/departments", depHandler.Fetch)
 
-	courseHandler := handler.NewCourseHandler(db)
+	courseHandler := handler.NewCourseHandler(databasesConnection)
 	r.Post("/courses", courseHandler.Create)
 	r.Get("/courses", courseHandler.Fetch)
 
-	r.Route("/students", router.NewStudentRouter(db))
+	r.Route("/students", router.NewStudentRouter(databasesConnection))
 
 	log.Printf("NEGO API started on port %s.\n", port)
 	log.Fatal(http.ListenAndServe(":"+port, r))
