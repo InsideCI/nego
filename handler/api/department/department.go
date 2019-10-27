@@ -1,4 +1,4 @@
-package handler
+package department
 
 import (
 	"encoding/json"
@@ -25,12 +25,12 @@ func NewDepartmentHandler(driver *driver.DB) *Department {
 
 // Create receives and request body and creates a new instance of Department.
 func (d *Department) Create(w http.ResponseWriter, r *http.Request) {
-	var dep model.Department
-	if err := json.NewDecoder(r.Body).Decode(&dep); err != nil {
+	var deps []model.Department
+	if err := json.NewDecoder(r.Body).Decode(&deps); err != nil {
 		log.Println(err)
 		return
 	}
-	d.repo.Create(&dep)
+	d.repo.Create(deps)
 	w.Write([]byte("OK"))
 }
 

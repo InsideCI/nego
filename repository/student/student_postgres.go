@@ -18,11 +18,14 @@ func NewStudentRepository(db *driver.DB) repository.StudentRepository {
 	}
 }
 
-func (r *postgresStudentRespository) Create(student *model.Student) (magtricula int, err error) {
-	if err = r.db.Create(&student).Error; err != nil {
-		return
+func (r *postgresStudentRespository) Create(students []model.Student) (created int, err error) {
+	for _, student := range students {
+		if err = r.db.Create(&student).Error; err != nil {
+			return
+		}
+		created++
 	}
-	return student.Matricula, nil
+	return
 }
 
 func (r *postgresStudentRespository) Fetch(limit ...int) (students []*model.Student, err error) {

@@ -1,4 +1,4 @@
-package handler
+package center
 
 import (
 	"encoding/json"
@@ -25,20 +25,20 @@ func NewCenterHandler(driver *driver.DB) *Center {
 
 // Create receives a body composed of an Center JSON data.s
 func (c *Center) Create(w http.ResponseWriter, r *http.Request) {
-	var center model.Center
-	if err := json.NewDecoder(r.Body).Decode(&center); err != nil {
-		log.Println(err)
+	var centers []model.Center
+	if err := json.NewDecoder(r.Body).Decode(&centers); err != nil {
+		log.Println("[HANDLER]", err)
 		return
 	}
-	c.repo.Create(&center)
+	c.repo.Create(centers)
 	w.Write([]byte("OK"))
 }
 
-// Fetch returns an array containing exaclty the quantity of predefined entities.
+// Fetch returns an array containing exactly the quantity of predefined entities.
 func (c *Center) Fetch(w http.ResponseWriter, r *http.Request) {
 	centers, err := c.repo.Fetch(10)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("[HANDLER]", err)
 	}
 	json.NewEncoder(w).Encode(centers)
 }

@@ -17,11 +17,14 @@ func NewDepartmentRepository(db *gorm.DB) repository.DepartmentRepository {
 	}
 }
 
-func (r *postgresDepartmentRepository) Create(dep *model.Department) (id int, err error) {
-	if err = r.db.Create(&dep).Error; err != nil {
-		return
+func (r *postgresDepartmentRepository) Create(deps []model.Department) (created int, err error) {
+	for _, dep := range deps {
+		if err = r.db.Create(&dep).Error; err != nil {
+			return
+		}
+		created++
 	}
-	return dep.ID, nil
+	return
 }
 
 func (r *postgresDepartmentRepository) Fetch(limit int) (deps []*model.Department, err error) {

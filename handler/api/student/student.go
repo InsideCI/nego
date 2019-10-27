@@ -1,4 +1,4 @@
-package handler
+package student
 
 import (
 	"encoding/json"
@@ -26,12 +26,12 @@ func NewStudentHandler(db *driver.DB) *Student {
 }
 
 func (s *Student) Create(w http.ResponseWriter, r *http.Request) {
-	var student model.Student
-	if err := json.NewDecoder(r.Body).Decode(&student); err != nil {
+	var students []model.Student
+	if err := json.NewDecoder(r.Body).Decode(&students); err != nil {
 		log.Println(err)
 		return
 	}
-	s.repo.Create(&student)
+	s.repo.Create(students)
 	w.Write([]byte("OK"))
 }
 
@@ -52,6 +52,6 @@ func (s *Student) FetchOne(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	student, err := s.repo.FetchOne(reg)
-	err = json.NewEncoder(w).Encode(student)
+	st, err := s.repo.FetchOne(reg)
+	err = json.NewEncoder(w).Encode(st)
 }

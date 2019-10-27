@@ -2,10 +2,10 @@ package router
 
 import (
 	"context"
+	"github.com/InsideCI/nego/handler/api/student"
 	"net/http"
 
 	"github.com/InsideCI/nego/driver"
-	"github.com/InsideCI/nego/handler"
 	"github.com/go-chi/chi"
 )
 
@@ -20,7 +20,7 @@ func studentCtx(next http.Handler) http.Handler {
 // NewStudentRouter returns a new router for student endpoints.
 func NewStudentRouter(db *driver.DB) func(r chi.Router) {
 	return func(r chi.Router) {
-		StudentHandler := handler.NewStudentHandler(db)
+		StudentHandler := student.NewStudentHandler(db)
 		r.Post("/", StudentHandler.Create)
 		r.Get("/", StudentHandler.Fetch)
 		r.Route("/{id}", func(r chi.Router) {
