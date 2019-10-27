@@ -1,4 +1,4 @@
-package handler
+package course
 
 import (
 	"encoding/json"
@@ -25,12 +25,12 @@ func NewCourseHandler(db *driver.DB) *Course {
 
 // Create uses request body as parameter for a new Course entry.
 func (c *Course) Create(w http.ResponseWriter, r *http.Request) {
-	var course model.Course
-	if err := json.NewDecoder(r.Body).Decode(&course); err != nil {
+	var courses []model.Course
+	if err := json.NewDecoder(r.Body).Decode(&courses); err != nil {
 		log.Println(err)
 		return
 	}
-	c.repo.Create(&course)
+	c.repo.Create(courses)
 	w.Write([]byte("OK"))
 }
 

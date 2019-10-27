@@ -13,10 +13,11 @@ import (
 // DB wrappes available projet databases.
 type DB struct {
 	Psql *gorm.DB
-	//sqlserver *gorm.DB
+	//Mongodb *gorm.DB
 }
 
-// CreateDatabasesConnections returns an instance of Postgres database connection.
+// CreateDatabasesConnections returns an instance of predefined
+// databases connection.
 func CreateDatabasesConnections() (*DB, error) {
 
 	// Any .env file with following parameters will be compatible;
