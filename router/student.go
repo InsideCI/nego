@@ -9,7 +9,7 @@ import (
 	"github.com/go-chi/chi"
 )
 
-func studentCtx(next http.Handler) http.Handler {
+func idContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		id := chi.URLParam(r, "id")
 		ctx := context.WithValue(r.Context(), "id", id)
@@ -24,7 +24,7 @@ func NewStudentRouter(db *driver.DB) func(r chi.Router) {
 		r.Post("/", StudentHandler.Create)
 		r.Get("/", StudentHandler.Fetch)
 		r.Route("/{id}", func(r chi.Router) {
-			r.Use(studentCtx)
+			r.Use(idContext)
 			r.Get("/", StudentHandler.FetchOne)
 			//Put
 			//Delete
