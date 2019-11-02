@@ -12,7 +12,7 @@ type postgresClassRepository struct {
 	db *gorm.DB
 }
 
-func NewClassRepository(db *driver.DB) repository.ClassRepository {
+func NewClassRepository(db *gorm.DB) repository.ClassRepository {
 	return &postgresClassRepository{
 		db: db.Psql,
 	}

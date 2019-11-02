@@ -6,7 +6,7 @@ import (
 
 // Student abstracts a basic UFPB student.
 type Student struct {
-	Matricula int    `json:"matricula" gorm:"type:bigint;index:index_student_id;"`
+	Matricula int    `json:"matricula" gorm:"PRIMARY_KEY;type:bigint;index:index_student_id;"`
 	Nome      string `json:"nome"`
 	IDCurso   int    `json:"id_curso" gorm:"index:index_student_course"`
 }

@@ -35,7 +35,7 @@ func (r *postgresStudentRespository) Fetch(limit ...int) (students []*model.Stud
 	return
 }
 
-func (r *postgresStudentRespository) FetchOne(registration int64) (*model.Student, error) {
+func (r *postgresStudentRespository) FetchOne(registration int) (*model.Student, error) {
 	var student model.Student
 	err := r.db.Where("matricula = ?", registration).First(&student).Error
 	if err != nil {

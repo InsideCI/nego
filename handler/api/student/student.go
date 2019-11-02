@@ -2,7 +2,6 @@ package student
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -26,19 +25,23 @@ func NewStudentHandler(db *driver.DB) *Student {
 }
 
 func (s *Student) Create(w http.ResponseWriter, r *http.Request) {
-	var students []model.Student
-	if err := json.NewDecoder(r.Body).Decode(&students); err != nil {
-		log.Println(err)
-		return
+	var created int
+	ctx := r.Context()
+	students := ctx.Value("students").([]model.Student)
+
+	created, err := s.repo.Create(students)
+
+	if err != nil {
+		log.Println("[HANDLER]", err)
 	}
-	s.repo.Create(students)
-	w.Write([]byte("OK"))
+
+	w.Write([]byte(strconv.Itoa(created)))
 }
 
 func (s *Student) Fetch(w http.ResponseWriter, r *http.Request) {
 	students, err := s.repo.Fetch()
 	if err != nil {
-		log.Println(err)
+		log.Println("[HANDLER]", err)
 		return
 	}
 	json.NewEncoder(w).Encode(students)
@@ -47,11 +50,12 @@ func (s *Student) Fetch(w http.ResponseWriter, r *http.Request) {
 // FetchOne uses id param as primary key search
 func (s *Student) FetchOne(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	id := ctx.Value("id")
-	reg, err := strconv.ParseInt(fmt.Sprintf("%v", id), 10, 64)
+	registration, _ := strconv.Atoi(ctx.Value("id").(string))
+
+	student, err := s.repo.FetchOne(registration)
 	if err != nil {
-		log.Fatal(err)
+		http.Error(w, err.Error(), http.StatusBadRequest)
 	}
-	st, err := s.repo.FetchOne(reg)
-	err = json.NewEncoder(w).Encode(st)
+	_ = json.NewEncoder(w).Encode(student)
+
 }
