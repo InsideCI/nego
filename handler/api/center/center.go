@@ -2,13 +2,12 @@ package center
 
 import (
 	"encoding/json"
-	"log"
-	"net/http"
-
 	"github.com/InsideCI/nego/driver"
 	"github.com/InsideCI/nego/model"
 	"github.com/InsideCI/nego/repository"
 	"github.com/InsideCI/nego/repository/center"
+	"log"
+	"net/http"
 )
 
 // Center is an abstraction handler for Center type
@@ -27,10 +26,12 @@ func NewCenterHandler(driver *driver.DB) *Center {
 func (c *Center) Create(w http.ResponseWriter, r *http.Request) {
 	var centers []model.Center
 	if err := json.NewDecoder(r.Body).Decode(&centers); err != nil {
-		log.Println("[HANDLER]", err)
-		return
+		http.Error(w, err.Error(), http.StatusBadRequest)
 	}
-	c.repo.Create(centers)
+	_, err := c.repo.Create(centers)
+	if err != nil {
+		http.Error(w, err.Error(), 404)
+	}
 	w.Write([]byte("OK"))
 }
 
@@ -38,7 +39,13 @@ func (c *Center) Create(w http.ResponseWriter, r *http.Request) {
 func (c *Center) Fetch(w http.ResponseWriter, r *http.Request) {
 	centers, err := c.repo.Fetch(10)
 	if err != nil {
-		log.Fatal("[HANDLER]", err)
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		log.Println(err)
 	}
 	json.NewEncoder(w).Encode(centers)
+}
+
+// FetchOne returns an Center by it's ID.
+func (c *Center) FetchOne(w http.ResponseWriter, r *http.Request) {
+
 }

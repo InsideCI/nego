@@ -6,5 +6,5 @@ import "github.com/InsideCI/nego/model"
 type StudentRepository interface {
 	Create(students []model.Student) (int, error)
 	Fetch(limit ...int) ([]*model.Student, error)
-	FetchOne(registration int64) (*model.Student, error)
+	FetchOne(registration int) (*model.Student, error)
 }
