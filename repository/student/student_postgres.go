@@ -14,7 +14,7 @@ type postgresStudentRespository struct {
 // NewStudentRepository creates a PostgreSQL CRUD interface implementation
 func NewStudentRepository(db *driver.DB) repository.StudentRepository {
 	return &postgresStudentRespository{
-		db: db.Psql,
+		db: db.Postgres,
 	}
 }
 

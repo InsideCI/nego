@@ -18,7 +18,7 @@ type Class struct {
 // NewClassHandler returns a new Handler for a predefined database ORM.
 func NewClassHandler(driver *driver.DB) *Class {
 	return &Class{
-		repo: class.NewClassRepository(driver.Psql),
+		repo: class.NewClassRepository(driver.Postgres),
 	}
 }
 

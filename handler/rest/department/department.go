@@ -19,7 +19,7 @@ type Department struct {
 // NewDepartmentHandler creates a new handler for Department
 func NewDepartmentHandler(driver *driver.DB) *Department {
 	return &Department{
-		repo: department.NewDepartmentRepository(driver.Psql),
+		repo: department.NewDepartmentRepository(driver.Postgres),
 	}
 }
 
