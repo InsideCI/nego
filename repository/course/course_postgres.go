@@ -15,7 +15,7 @@ type postgresCourseRepository struct {
 // using postgres.
 func NewCourseRepository(db *driver.DB) repository.CourseRepository {
 	return &postgresCourseRepository{
-		db: db.Psql,
+		db: db.Postgres,
 	}
 }
 

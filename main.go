@@ -2,9 +2,9 @@ package main
 
 import (
 	"github.com/InsideCI/nego/driver"
-	"github.com/InsideCI/nego/handler/api/center"
-	"github.com/InsideCI/nego/handler/api/course"
-	"github.com/InsideCI/nego/handler/api/department"
+	"github.com/InsideCI/nego/handler/rest/center"
+	"github.com/InsideCI/nego/handler/rest/course"
+	"github.com/InsideCI/nego/handler/rest/department"
 	"github.com/InsideCI/nego/router"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
@@ -17,7 +17,7 @@ import (
 func Init(port string) {
 
 	// Database init configurations
-	err := godotenv.Load("database.env")
+	err := godotenv.Load("app.env")
 	if err != nil {
 		log.Fatal("Error loading .env file.")
 	}

@@ -18,7 +18,7 @@ type Center struct {
 // NewCenterHandler returns a Handler of type Center
 func NewCenterHandler(driver *driver.DB) *Center {
 	return &Center{
-		repo: center.NewCenterRepository(driver.Psql),
+		repo: center.NewCenterRepository(driver.Postgres),
 	}
 }
 
