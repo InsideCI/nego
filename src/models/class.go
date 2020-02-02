@@ -1,4 +1,4 @@
-package model
+package models
 
 type Class struct {
 	ID        int    `json:"id" ID   gorm:"PRIMARY_KEY;index:index_center_id"`

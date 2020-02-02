@@ -1,4 +1,4 @@
-package model
+package models
 
 // Course abstracts
 type Course struct {

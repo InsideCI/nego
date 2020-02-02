@@ -1,12 +1,12 @@
-package router
+package routers
 
 import (
 	"context"
 	"encoding/json"
+	"github.com/InsideCI/nego/src/controllers/rest"
 	"github.com/InsideCI/nego/src/driver"
-	"github.com/InsideCI/nego/src/model"
-	router "github.com/InsideCI/nego/src/router/generic"
-	"github.com/InsideCI/nego/src/service/rest/student"
+	"github.com/InsideCI/nego/src/models"
+	router "github.com/InsideCI/nego/src/routers/middlewares"
 	"github.com/go-chi/chi"
 	"net/http"
 )
@@ -16,7 +16,7 @@ func CreateContext(next http.Handler) http.Handler {
 		if r.ContentLength == 0 {
 			http.Error(w, http.StatusText(http.StatusNoContent), http.StatusNoContent)
 		}
-		var students []model.Student
+		var students []models.Student
 		if err := json.NewDecoder(r.Body).Decode(&students); err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 		}
@@ -38,10 +38,10 @@ func ValidStudent(next http.Handler) http.Handler {
 	})
 }
 
-// NewStudentRouter returns a new router for student endpoints.
+// NewStudentRouter returns a new routers for student endpoints.
 func NewStudentRouter(db *driver.DB) func(r chi.Router) {
 	return func(r chi.Router) {
-		handlers := student.NewStudentService(db)
+		handlers := rest.NewStudentController(db)
 
 		// students
 		r.With(CreateContext).With().Post("/", handlers.Create)

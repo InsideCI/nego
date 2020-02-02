@@ -1,4 +1,4 @@
-package model
+package models
 
 // Center abstracts a UFPB Center.
 type Center struct {
