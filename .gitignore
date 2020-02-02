@@ -4,6 +4,7 @@
 *.dll
 *.so
 *.dylib
+nego
 
 # Test binary, build with `go test -c`
 *.test
@@ -16,5 +17,4 @@
 
 # IDE and binaries
 .vscode
-nego
 /.idea/
