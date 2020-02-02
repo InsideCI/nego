@@ -52,10 +52,10 @@ func (s *StudentService) FetchOne(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	registration, _ := strconv.Atoi(ctx.Value("id").(string))
 
-	student, err := s.repo.FetchOne(registration)
+	student_, err := s.repo.FetchOne(registration)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 	}
-	_ = json.NewEncoder(w).Encode(student)
+	_ = json.NewEncoder(w).Encode(student_)
 
 }

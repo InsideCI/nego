@@ -28,7 +28,7 @@ func (r *postgresStudentRespository) Create(students []model.Student) (created i
 	return
 }
 
-func (r *postgresStudentRespository) Fetch(limit int) (students []*model.Student, err error) {
+func (r *postgresStudentRespository) Fetch(limit ...int) (students []*model.Student, err error) {
 	//TODO: implement default maximum API limit if not provided
 
 	if err = r.db.Find(&students).Error; err != nil {
