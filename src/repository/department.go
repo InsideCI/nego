@@ -1,6 +1,6 @@
 package repository
 
-import "github.com/InsideCI/nego/model"
+import "github.com/InsideCI/nego/src/model"
 
 // DepartmentRepository abstracts CRUD methods for Department.
 type DepartmentRepository interface {

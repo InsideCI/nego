@@ -1,10 +1,11 @@
-package repository
+package generic
 
 type GenericRepository interface {
 	Create(model interface{}) interface{}
+	Count(model interface{}) int
+	Delete(id int)
 	FetchOne(model interface{}, id int) interface{}
 	Fetch(model interface{}) interface{}
 	Update(model interface{}, id int) interface{}
-	Delete(id int)
 	Exists(id int) bool
 }

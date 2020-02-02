@@ -1,9 +1,9 @@
 package student
 
 import (
-	"github.com/InsideCI/nego/driver"
-	"github.com/InsideCI/nego/model"
-	"github.com/InsideCI/nego/repository"
+	"github.com/InsideCI/nego/src/driver"
+	"github.com/InsideCI/nego/src/model"
+	"github.com/InsideCI/nego/src/repository"
 	"github.com/jinzhu/gorm"
 )
 
@@ -28,7 +28,9 @@ func (r *postgresStudentRespository) Create(students []model.Student) (created i
 	return
 }
 
-func (r *postgresStudentRespository) Fetch(limit ...int) (students []*model.Student, err error) {
+func (r *postgresStudentRespository) Fetch(limit int) (students []*model.Student, err error) {
+	//TODO: implement default maximum API limit if not provided
+
 	if err = r.db.Find(&students).Error; err != nil {
 		return
 	}

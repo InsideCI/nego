@@ -1,11 +1,8 @@
 package main
 
 import (
-	"github.com/InsideCI/nego/driver"
-	"github.com/InsideCI/nego/handler/rest/center"
-	"github.com/InsideCI/nego/handler/rest/course"
-	"github.com/InsideCI/nego/handler/rest/department"
-	"github.com/InsideCI/nego/router"
+	"github.com/InsideCI/nego/src/driver"
+	"github.com/InsideCI/nego/src/router"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/joho/godotenv"
@@ -32,17 +29,9 @@ func Init(port string) {
 	r.Use(middleware.Logger)
 	//r.Use(middleware.Timeout(5 * time.Second))
 
-	centerHandler := center.NewCenterHandler(dbConnection)
-	r.Post("/centers", centerHandler.Create)
-	r.Get("/centers", centerHandler.Fetch)
-
-	depHandler := department.NewDepartmentHandler(dbConnection)
-	r.Post("/departments", depHandler.Create)
-	r.Get("/departments", depHandler.Fetch)
-
-	courseHandler := course.NewCourseHandler(dbConnection)
-	r.Post("/courses", courseHandler.Create)
-	r.Get("/courses", courseHandler.Fetch)
+	//centerHandler := center.NewCenterHandler(dbConnection)
+	//r.Post("/centers", centerHandler.Create)
+	//r.Get("/centers", centerHandler.Fetch)
 
 	r.Route("/students", router.NewStudentRouter(dbConnection))
 

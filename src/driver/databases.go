@@ -5,19 +5,19 @@ import (
 	"log"
 	"os"
 
-	"github.com/InsideCI/nego/model"
+	"github.com/InsideCI/nego/src/model"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres" //postgres dialect
 )
 
 // DB wrappes available projet databases.
 type DB struct {
-	Psql *gorm.DB
+	Postgres *gorm.DB
 	//Mongodb *gorm.DB
 }
 
 // CreateDatabasesConnections returns an instance of predefined
-// databases connection.
+// databases connections.
 func CreateDatabasesConnections() (*DB, error) {
 
 	// Any .env file with following parameters will be compatible;
@@ -38,6 +38,6 @@ func CreateDatabasesConnections() (*DB, error) {
 	log.Println("Migration ended with no errors.")
 
 	return &DB{
-		Psql: db,
+		Postgres: db,
 	}, nil
 }

@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"github.com/InsideCI/nego/model"
+	"github.com/InsideCI/nego/src/model"
 )
 
 // CenterRepository abstract database CRUD methods for Center.
