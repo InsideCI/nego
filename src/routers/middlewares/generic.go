@@ -1,4 +1,4 @@
-package router
+package middlewares
 
 import (
 	"context"
@@ -7,6 +7,12 @@ import (
 	"net/http"
 	"strconv"
 )
+
+func Validate(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+	})
+}
 
 func IDContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

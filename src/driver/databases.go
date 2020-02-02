@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/InsideCI/nego/src/model"
+	"github.com/InsideCI/nego/src/models"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres" //postgres dialect
 )
@@ -34,7 +34,7 @@ func CreateDatabasesConnections() (*DB, error) {
 		log.Fatal(err)
 	}
 	log.Println("Connected to Postgres database. Starting migration...")
-	db.AutoMigrate(&model.Center{}, &model.Department{}, &model.Course{}, &model.Student{})
+	db.AutoMigrate(&models.Center{}, &models.Department{}, &models.Course{}, &models.Student{})
 	log.Println("Migration ended with no errors.")
 
 	return &DB{

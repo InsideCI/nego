@@ -1,4 +1,4 @@
-package model
+package models
 
 // Department abstract department in UFPB
 type Department struct {

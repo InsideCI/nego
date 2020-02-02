@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/InsideCI/nego/src/driver"
-	"github.com/InsideCI/nego/src/router"
+	"github.com/InsideCI/nego/src/routers"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/joho/godotenv"
@@ -33,7 +33,7 @@ func Init(port string) {
 	//r.Post("/centers", centerHandler.Create)
 	//r.Get("/centers", centerHandler.Fetch)
 
-	r.Route("/students", router.NewStudentRouter(dbConnection))
+	r.Route("/students", routers.NewStudentRouter(dbConnection))
 
 	log.Printf("NEGO API started on port %s.\n", port)
 	log.Fatal(http.ListenAndServe(":"+port, r))
