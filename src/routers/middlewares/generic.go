@@ -2,9 +2,8 @@ package middlewares
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
-	"github.com/InsideCI/nego/src/models"
+	"github.com/InsideCI/nego/src/utils/constants"
 	"github.com/go-chi/chi"
 	"net/http"
 	"strconv"
@@ -28,23 +27,21 @@ func IDContext(next http.Handler) http.Handler {
 	})
 }
 
-func PayloadContext(next http.Handler) http.Handler {
+func QueryContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.ContentLength == 0 {
-			http.Error(w, http.StatusText(http.StatusNoContent), http.StatusNoContent)
-		}
-		var students []models.Student
-		if err := json.NewDecoder(r.Body).Decode(&students); err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
-		}
-		for _, stud := range students {
-			if stud.Matricula == 0 || stud.Nome == "" || stud.IDCurso == 0 {
-				http.Error(w, http.StatusText(http.StatusNotAcceptable), http.StatusNotAcceptable)
-				w.Header().Set("ERROR", "You can't send empty values for student.")
-				return
+		keys := r.URL.Query()
+
+		params := make(map[string][]string)
+		if len(keys) != 0 {
+			for key, value := range keys {
+				params[key] = value
 			}
+		} else {
+			limit := strconv.Itoa(constants.MAXIMUM_FETCH)
+			params["limit"] = append(params["limit"], limit)
 		}
-		ctx := context.WithValue(r.Context(), "students", students)
+
+		ctx := context.WithValue(r.Context(), "params", params)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }
