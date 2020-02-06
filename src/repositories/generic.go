@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"fmt"
 	"github.com/InsideCI/nego/src/utils/constants"
 	"github.com/jinzhu/gorm"
 )
@@ -8,13 +9,11 @@ import (
 type GenericRepository struct {
 }
 
-func (r *GenericRepository) Create(db *gorm.DB, value interface{}) interface{} {
-	//if err = db.Create(&value).Error; err != nil {
-	//	return nil, err
-	//}
-	//return value, nil
-	db.Create(&value)
-	return value
+func (r *GenericRepository) Create(db *gorm.DB, value interface{}) (interface{}, error) {
+	if err := db.Create(&value).Error; err != nil {
+		return nil, err
+	}
+	return value, nil
 }
 
 func (r *GenericRepository) Count(db *gorm.DB, value interface{}) (int, error) {
@@ -25,16 +24,17 @@ func (r *GenericRepository) Count(db *gorm.DB, value interface{}) (int, error) {
 	return count, nil
 }
 
-func (r *GenericRepository) Fetch(db *gorm.DB, limit int, value interface{}) (interface{}, error) {
+func (r *GenericRepository) Fetch(db *gorm.DB, limit int, model interface{}) (interface{}, error) {
 	var err error
 	if limit != 0 {
-		if err = db.Limit(limit).Find(&value).Error; err != nil {
+		fmt.Print("something to hold on")
+		if err = db.Limit(limit).Find(model).Error; err != nil {
 			return nil, err
 		}
-	} else if err = db.Limit(constants.MAXIMUM_FETCH).Find(&value).Error; err != nil {
+	} else if err = db.Limit(constants.MAXIMUM_FETCH).Find(model).Error; err != nil {
 		return nil, err
 	}
-	return value, nil
+	return model, nil
 }
 
 func (r *GenericRepository) FetchOne(db *gorm.DB, id int, value interface{}) (interface{}, error) {
