@@ -29,10 +29,10 @@ func CreateDatabasesConnections() (*DB, error) {
 
 	dbURI := fmt.Sprintf("host=%s port=%s dbname=%s user=%s password=%s  sslmode=disable", host, port, name, user, pass)
 	db, err := gorm.Open("postgres", dbURI)
-
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
+
 	log.Println("Connected to Postgres database. Starting migration...")
 	db.AutoMigrate(&model.Center{}, &model.Department{}, &model.Course{}, &model.Student{})
 	log.Println("Migration ended with no errors.")
