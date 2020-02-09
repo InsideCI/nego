@@ -134,7 +134,7 @@ Today's API version is 'v1'.
 Before everything:
 
 * You need at least an empty PostgreSQL database created with the basic model logic above.
-* There's also an custom scrapper created just for this project, called [SUS](github.com/InsideCI/sus), so you can populate your api with real data.
+* There's also a custom scrapper created just for this project, called [SUS](github.com/InsideCI/sus), so you can populate your database with real data.
 
 Your must create a `app.env` file on root folder and fill those parameters:
 
