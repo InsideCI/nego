@@ -2,6 +2,7 @@ package model
 
 import (
 	"encoding/json"
+	"github.com/go-playground/validator/v10"
 )
 
 // Student abstracts a basic UFPB student.
@@ -24,4 +25,9 @@ func NewStudent(matricula int, nome string, idCurso int) *Student {
 func (s *Student) JSON() []byte {
 	p, _ := json.Marshal(s)
 	return p
+}
+
+func (s *Student) Valid() error {
+	v := validator.New()
+	return v.Struct(s)
 }
