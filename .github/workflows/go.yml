@@ -27,12 +27,14 @@ jobs:
     - name: Build
       run: go build -v .
       
-    - name: Test
-      run: go test ./... -race -coverprofile=coverage.txt -covermode=atomic
-      
-    - name: Upload coverage
-      env: 
-        CODECOV_TOKEN: ${{secrets.CODECOV_TOKEN}}
-      run:
-        bash <(curl -s https://codecov.io/bash)
+  test:
+      name: Test
+      runs-on: [ubuntu-latest]
+      steps:
+        - name: Testing
+          env: 
+            CODECOV_TOKEN: ${{secrets.CODECOV_TOKEN}}
+          run: | 
+            go test ./... -race -coverprofile=coverage.txt -covermode=atomic
+            bash <(curl -s https://codecov.io/bash)
         
