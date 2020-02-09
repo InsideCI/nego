@@ -1,4 +1,4 @@
-package models
+package model
 
 type Class struct {
 	ID        int    `json:"id" ID   gorm:"PRIMARY_KEY;index:index_center_id"`
@@ -6,7 +6,7 @@ type Class struct {
 	Turma     string `json:"turma"`
 	Professor string `json:"professor"`
 	Horario   string `json:"horario"`
-	IDCurso   int    `json:"id_curso" gorm:"PRIMARY_KEY,index:index_class_course"`
+	IDCurso   int    `json:"idCurso" gorm:"PRIMARY_KEY,index:index_class_course"`
 }
 
 func NewClass(id, idCurso int, nome, turma, professor, horario string) *Class {
