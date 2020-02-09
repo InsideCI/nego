@@ -5,8 +5,8 @@ import (
 	"testing"
 )
 
-func TestNewStudent(t *testing.T) {
-	got := model.NewStudent(1010, "Student", 1010)
+func TestNewCenter(t *testing.T) {
+	got := model.NewCenter(1010, "Center")
 	if err := got.Valid(); err != nil {
 		t.Error(err)
 	}
