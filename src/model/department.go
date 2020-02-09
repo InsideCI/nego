@@ -1,10 +1,10 @@
-package models
+package model
 
 // Department abstract department in UFPB
 type Department struct {
 	ID       int    `json:"id" gorm:"PRIMARY_KEY;index:index_department_id"`
 	Nome     string `json:"nome"`
-	IDCentro int    `json:"id_centro" gorm:"index:index_dept_center"`
+	IDCentro int    `json:"idCentro" gorm:"index:index_dept_center"`
 }
 
 // NewDepartment returns a new instance of Department

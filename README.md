@@ -1,6 +1,6 @@
 # NEGO
-[![Build Status](https://travis-ci.com/InsideCI/nego.svg?branch=master)](https://travis-ci.com/InsideCI/nego)
-[![Go Report Card](https://goreportcard.com/badge/github.com/InsideCI/nego.svg?branch=master)](https://goreportcard.com/badge/github.com/InsideCI/nego)
+[![Build Status](https://github.com/InsideCI/nego/workflows/NEGO/badge.svg)](https://github.com/InsideCI/nego/actions)
+[![Go Report Card](https://goreportcard.com/badge/github.com/InsideCI/nego)](https://goreportcard.com/report/github.com/InsideCI/nego)
 
 NEGO is a UFPB SIGAA Restful API created with Golang for study purposes only, but it may fit your needs.
 
@@ -12,36 +12,86 @@ NEGO is a UFPB SIGAA Restful API created with Golang for study purposes only, bu
 
 ### AVAILABLE RESOURCES:
 
-`API_VERSION/centers`
+`/centers`
 
-`API_VERSION/departments`
+```json
+{
+  "id": 1856,
+  "nome": "CENTRO DE INFORMÁTICA (CI)"
+}
+```
 
-`API_VERSION/courses`
+`/departments`
+```json
+{
+  "id": 2151,
+  "nome": "DEPARTAMENTO DE INFORMÁTICA", "idCentro": "1856"
+}
+```
 
-`API_VERSION/students`
+`/teachers`
+```json
+{
+  "id": 1743917,
+  "nome": "THAIS GAUDENCIO DO REGO",
+  "grau": "DOUTOR",
+  "idDepartamento": 2151
+}
+```
 
-`API_VERSION/disciplines`
+`/courses`
+```json
+{
+  "id": 1626865,
+  "nome": "ENGENHARIA DE COMPUTAÇÃO/CI",
+  "local": "João Pessoa",
+  "tipo": "Presencial",
+  "coordenador": "CHRISTIAN AZAMBUJA PAGOT",
+  "idCentro": 1856
+}
+```
+
+`/students`
+```json
+{
+  "matricula": 11409558,
+  "nome": "CLEANDERSON LINS COUTINHO",
+  "idCurso": 1626865
+}
+```
+
+`/classes`
+```json
+{
+  "id": "GDSCO0081",
+  "nome": "SISTEMAS EMBARCADOS I",
+  "turma": "01",
+  "professor": "ALISSON VASCONCELOS DE BRITO",
+  "horario": "24T23",
+  "idCurso": 1626865
+}
+```
 
 ...and more to come.
 
 Today's API version is 'v1'.
 
-### MODELS STRUCTURE:
+### MODELS RELATION LOGIC:
 
 ```sql
-    CREATE TABLE centros (
+    CREATE TABLE CENTROS (
             id INT NOT NULL PRIMARY KEY,
             nome VARCHAR (100) NOT NULL
     );
     
-    CREATE TABLE departamentos (
+    CREATE TABLE DEPARTAMENTOS (
             id INT NOT NULL PRIMARY KEY,
             nome VARCHAR (100) NOT NULL,
             id_centro INT NOT NULL,
             FOREIGN KEY (id_centro) REFERENCES centros(id)
     );
     
-    CREATE TABLE cursos (
+    CREATE TABLE CURSOS (
             id INT NOT NULL PRIMARY KEY,
             nome VARCHAR (100) NOT NULL,
             cidade VARCHAR (100),
@@ -51,7 +101,7 @@ Today's API version is 'v1'.
             FOREIGN KEY (id_centro) REFERENCES centros(id)
     );
     
-    CREATE TABLE turmas (
+    CREATE TABLE TURMAS (
             codigo VARCHAR(10) NOT NULL PRIMARY KEY,
             disciplina VARCHAR (100) NOT NULL,
             turma INT NOT NULL,
@@ -62,14 +112,14 @@ Today's API version is 'v1'.
             FOREIGN KEY (id_curso) REFERENCES cursos(id)
     );
     
-    CREATE TABLE alunos (
+    CREATE TABLE ALUNOS (
             matricula BIGINT NOT NULL PRIMARY KEY,
             nome VARCHAR(100) NOT NULL,
             id_curso INT NOT NULL,
             FOREIGN KEY (id_curso) REFERENCES cursos(id)
     );
     
-    CREATE TABLE professores (
+    CREATE TABLE PROFESSORES (
             id INT NOT NULL PRIMARY KEY,
             nome VARCHAR(100) NOT NULL,
             grau VARCHAR(20) NOT NULL,
@@ -80,16 +130,21 @@ Today's API version is 'v1'.
 
 ### USAGE DETAILS
 
-#### BEFORE EVERYTHING
+Before everything:
+
+* You need at least an empty PostgreSQL database created with the basic model logic above.
+* There's also an custom scrapper created just for this project, called [SUS](github.com/InsideCI/sus), so you can populate your api with real data.
 
 Your must create a `app.env` file on root folder and fill those parameters:
 
-```.env
-db_name=yourdatabasename
-db_pass=yourdatabasepassword
-db_user=yourdatabaselogin
-db_host=yourdatabaseipaddress
-db_port=yourdatabaseport
+```yaml
+db_name=yourDatabaseName
+db_pass=yourDatabasePassword
+db_user=yourDatabaseLogin
+db_host=yourDatabaseIpaddress
+db_port=yourDatabasePort
+
+api_port=yourApiPort
 ```
 
 And then, you can run this project by:
@@ -97,3 +152,7 @@ And then, you can run this project by:
 `go build .`
 
 `./nego`
+
+You now can make requests with any REST client as [Insomnia](https://github.com/getinsomnia) or web application at the address:
+
+`http://localhost:yourApiPort`
