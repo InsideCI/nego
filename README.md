@@ -1,6 +1,7 @@
 # NEGO
 [![Build Status](https://github.com/InsideCI/nego/workflows/NEGO/badge.svg)](https://github.com/InsideCI/nego/actions)
 [![Go Report Card](https://goreportcard.com/badge/github.com/InsideCI/nego)](https://goreportcard.com/report/github.com/InsideCI/nego)
+[![codecov](https://codecov.io/gh/InsideCI/nego/branch/master/graph/badge.svg)](https://codecov.io/gh/InsideCI/nego)
 
 NEGO is a UFPB SIGAA Restful API created with Golang for study purposes only, but it may fit your needs.
 
