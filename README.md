@@ -10,6 +10,8 @@ NEGO is a UFPB SIGAA Restful API created with Golang for study purposes only, bu
 - Uses [GORM](github.com/jinzhu/gorm) as the default database management tool for a more dynamic approach to databases.
 - Router specification created with [CHI](github.com/go-chi/chi) reliable router structure.
 - Readable and simple code.
+- Multi database support for each resource.
+- Multi ARCH: structure created for both REST and gRPC support.
 
 ### AVAILABLE RESOURCES:
 
