@@ -25,6 +25,8 @@ func PayloadContext(next http.Handler) http.Handler {
 			return
 		}
 
+		student.Valid()
+
 		v := validator.New()
 		if err := v.Struct(student); err != nil {
 			utils.Throw(w, exceptions.InvalidAttributes, err)
@@ -39,11 +41,10 @@ func PayloadContext(next http.Handler) http.Handler {
 // NewStudentRouter returns a new router for student endpoints.
 func NewStudentRouter(db *driver.DB) func(r chi.Router) {
 	return func(r chi.Router) {
-		r.Use(middlewares.Cors.Handler)
 
 		handlers := rest.NewStudentController(db)
 		// students
-		r.With(PayloadContext).Post("/", handlers.Create)
+		//r.With(PayloadContext).Post("/", handlers.Create)
 		r.With(middlewares.QueryContext).Get("/", handlers.Fetch)
 
 		// students/{id}

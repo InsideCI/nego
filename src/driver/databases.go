@@ -34,7 +34,7 @@ func CreateDatabasesConnections() (*DB, error) {
 	}
 
 	log.Println("Connected to Postgres database. Starting migration...")
-	db.AutoMigrate(&model.Center{}, &model.Department{}, &model.Course{}, &model.Student{})
+	db.AutoMigrate(&model.Center{}, &model.Department{}, &model.Course{}, &model.Student{}, &model.Teacher{}, &model.GeneralStatistic{})
 	log.Println("Migration ended with no errors.")
 
 	return &DB{

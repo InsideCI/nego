@@ -3,6 +3,7 @@ package setup
 import (
 	"github.com/InsideCI/nego/src/driver"
 	"github.com/InsideCI/nego/src/router"
+	"github.com/InsideCI/nego/src/router/middlewares"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"log"
@@ -22,6 +23,7 @@ func Init() {
 	r := chi.NewRouter()
 	r.Use(middleware.RequestID)
 	r.Use(middleware.Logger)
+	r.Use(middlewares.Cors.Handler)
 	router.InitRoutes(dbConnection, r)
 
 	port := os.Getenv("api_port")

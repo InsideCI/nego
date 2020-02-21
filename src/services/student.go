@@ -12,9 +12,7 @@ type StudentService struct {
 }
 
 func NewStudentService() *StudentService {
-	return &StudentService{
-		repo: repository.NewStudentRepository(),
-	}
+	return &StudentService{repo: repository.NewStudentRepository()}
 }
 
 func (s *StudentService) Create(db *driver.DB, student model.Student) (*model.Student, error) {

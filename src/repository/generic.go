@@ -6,17 +6,18 @@ import (
 	"reflect"
 )
 
-type GenericRepositoryInterface interface {
-	Create(db *gorm.DB, value interface{})
-	Update(db *gorm.DB, id int, value interface{})
-	Delete(db *gorm.DB, id int)
-	Get(db *gorm.DB, id int, model interface{})
-	List(db *gorm.DB, model interface{})
-	Count(db *gorm.DB, model interface{})
-	Exists(db *gorm.DB, model interface{})
+type GenericRepository struct {
+	Type interface{}
 }
 
-type GenericRepository struct {
+func (r *GenericRepository) output() interface{} {
+	out := reflect.New(reflect.TypeOf(r.Type)).Interface()
+	return out
+}
+
+func (r *GenericRepository) slice() interface{} {
+	out := reflect.New(reflect.SliceOf(reflect.TypeOf(r.Type))).Interface()
+	return out
 }
 
 func (r *GenericRepository) Create(db *gorm.DB, value interface{}) (interface{}, error) {
