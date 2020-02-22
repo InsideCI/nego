@@ -6,7 +6,7 @@ type Teacher struct {
 	ID             int    `validate:"required" json:"id" gorm:"PRIMARY_KEY;type:bigint;"`
 	Nome           string `validate:"required" json:"nome" gorm:"index:index_teacher_name"`
 	Grau           string `json:"grau"`
-	IDDepartamento int    `validate:"required" json:"grau"`
+	IDDepartamento int    `validate:"required" json:"idDepartamento"`
 }
 
 func NewTeacher(id, idDepartamento int, nome, grau string) *Teacher {

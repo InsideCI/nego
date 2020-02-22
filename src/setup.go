@@ -14,7 +14,7 @@ import (
 func Init() {
 
 	// DATABASE
-	dbConnection, err := driver.CreateDatabasesConnections()
+	db, err := driver.CreateDatabasesConnections()
 	if err != nil {
 		panic(err)
 	}
@@ -24,7 +24,7 @@ func Init() {
 	r.Use(middleware.RequestID)
 	r.Use(middleware.Logger)
 	r.Use(middlewares.Cors.Handler)
-	router.InitRoutes(dbConnection, r)
+	router.InitRoutes(db, r)
 
 	port := os.Getenv("api_port")
 	log.Printf("NEGO API started on port %s.\n", port)

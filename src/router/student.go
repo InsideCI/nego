@@ -14,7 +14,7 @@ import (
 	"net/http"
 )
 
-func PayloadContext(next http.Handler) http.Handler {
+func StudentPayloadContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.ContentLength == 0 {
 			http.Error(w, http.StatusText(http.StatusNoContent), http.StatusNoContent)
@@ -44,7 +44,7 @@ func NewStudentRouter(db *driver.DB) func(r chi.Router) {
 
 		handlers := rest.NewStudentController(db)
 		// students
-		//r.With(PayloadContext).Post("/", handlers.Create)
+		r.With(StudentPayloadContext).Post("/", handlers.Create)
 		r.With(middlewares.QueryContext).Get("/", handlers.Fetch)
 
 		// students/{id}

@@ -12,13 +12,16 @@ type StudentService struct {
 }
 
 func NewStudentService() *StudentService {
-	return &StudentService{repo: repository.NewStudentRepository()}
+	return &StudentService{
+		repo: repository.NewStudentRepository(),
+	}
 }
 
 func (s *StudentService) Create(db *driver.DB, student model.Student) (*model.Student, error) {
 	//TODO: check and throw error if student' course doesn't exists in the database.
 	//courseRepository := repository.NewCourseRepository()
-	return s.repo.Create(db.Postgres, &student)
+	err := s.repo.Create(db.Postgres, &student)
+	return &student, err
 }
 
 func (s *StudentService) Fetch(db *driver.DB, params map[string][]string) (*model.Page, error) {
@@ -36,24 +39,20 @@ func (s *StudentService) Fetch(db *driver.DB, params map[string][]string) (*mode
 		if limit, err := strconv.Atoi(params["limit"][0]); err != nil {
 			return nil, err
 		} else {
-			fetched, err = s.repo.Fetch(db.Postgres, limit)
+			temp, err := s.repo.Fetch(db.Postgres, limit)
+			if err != nil {
+				return nil, err
+			}
+			fetched = temp.(*[]model.Student)
 		}
 	}
 	return model.NewPage(totalStudents, len(*fetched), fetched), nil
 }
 
-func (s *StudentService) FetchByName(db *driver.DB, name string) (*[]model.Student, error) {
-	return s.repo.FetchByName(db.Postgres, name)
-}
-
-func (s *StudentService) FetchOne(db *driver.DB, registration string) (*model.Student, error) {
-	return s.repo.FetchOne(db.Postgres, registration)
-}
-
-func (s *StudentService) Delete(db *driver.DB, registration int) (bool, error) {
-	return s.repo.Delete(db.Postgres, registration)
-}
-
 func (s *StudentService) Count(db *driver.DB) (int, error) {
-	return s.repo.Count(db.Postgres)
+	return s.repo.Count(db.Postgres, &model.Student{})
+}
+
+func (s *StudentService) FetchOne(db *driver.DB, id string) (*model.Student, error) {
+	return s.repo.FetchByRegistration(db.Postgres, id)
 }

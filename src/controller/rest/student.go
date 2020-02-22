@@ -2,7 +2,6 @@ package rest
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/InsideCI/nego/src/driver"
 	"github.com/InsideCI/nego/src/model"
 	"github.com/InsideCI/nego/src/services"
@@ -26,10 +25,10 @@ func NewStudentController(db *driver.DB) *StudentController {
 	}
 }
 
-func (s *StudentController) Create(w http.ResponseWriter, r *http.Request) {
+func (c *StudentController) Create(w http.ResponseWriter, r *http.Request) {
 	student := r.Context().Value("payload").(model.Student)
 
-	created, err := s.service.Create(s.db, student)
+	created, err := c.service.Create(c.db, student)
 
 	if err != nil {
 		log.Println("[HANDLER]", err)
@@ -38,24 +37,25 @@ func (s *StudentController) Create(w http.ResponseWriter, r *http.Request) {
 	_ = json.NewEncoder(w).Encode(created)
 }
 
-func (s *StudentController) Fetch(w http.ResponseWriter, r *http.Request) {
+func (c *StudentController) Fetch(w http.ResponseWriter, r *http.Request) {
 	params := r.Context().Value("params").(map[string][]string)
 
-	page, err := s.service.Fetch(s.db, params)
+	page, err := c.service.Fetch(c.db, params)
 	if err != nil {
-		fmt.Fprint(w, err)
+		utils.Throw(w, exceptions.BadRequest, err)
 		return
 	}
 	_ = json.NewEncoder(w).Encode(page)
 }
 
-// FetchOne uses id param as primary key search
-func (s *StudentController) FetchOne(w http.ResponseWriter, r *http.Request) {
+// FetchByMatricula uses id param as primary key search
+func (c *StudentController) FetchOne(w http.ResponseWriter, r *http.Request) {
 	registration := r.Context().Value("id").(string)
 
-	student, err := s.service.FetchOne(s.db, registration)
+	student, err := c.service.FetchOne(c.db, registration)
 	if err != nil {
 		utils.Throw(w, exceptions.InvalidAttributes, err)
+		return
 	}
 
 	_ = json.NewEncoder(w).Encode(student)
