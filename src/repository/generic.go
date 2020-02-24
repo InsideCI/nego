@@ -48,10 +48,8 @@ func (r *GenericRepository) FetchOne(db *gorm.DB, id string) (interface{}, error
 	return out, nil
 }
 
-func (r *GenericRepository) Exists(db *gorm.DB, id int, model interface{}) (bool, error) {
+func (r *GenericRepository) Exists(db *gorm.DB, model interface{}) bool {
 	var count int
-	if err := db.Model(model).Count(&count).Error; err != nil {
-		return false, err
-	}
-	return count != 0, nil
+	db.Model(model).Count(&count)
+	return count != 0
 }

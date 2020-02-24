@@ -9,7 +9,8 @@ type NegoErrorConstant struct {
 
 var (
 	BadRequest        = &NegoErrorConstant{"Bad request", http.StatusBadRequest}
-	InvalidAttributes = &NegoErrorConstant{"Invalid attributes, please check your payload.", http.StatusBadRequest}
+	InternalError     = &NegoErrorConstant{"Internal server error", http.StatusInternalServerError}
+	InvalidAttributes = &NegoErrorConstant{"Invalid attributes, please check your payload", http.StatusBadRequest}
 	NotFound          = &NegoErrorConstant{"Register not found", http.StatusNotFound}
 	InvalidIdentifier = &NegoErrorConstant{"Invalid identifier value", http.StatusBadRequest}
 )
