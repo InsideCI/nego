@@ -9,7 +9,7 @@ import (
 
 func Throw(w http.ResponseWriter, exception *exceptions.NegoErrorConstant, err error) {
 	Error := model.NegoError{
-		Err:     err,
+		Err:     err.Error(),
 		Message: exception.Message,
 		Status:  exception.Status,
 	}

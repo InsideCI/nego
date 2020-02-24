@@ -7,7 +7,6 @@ import (
 	"github.com/InsideCI/nego/src/services"
 	"github.com/InsideCI/nego/src/utils"
 	"github.com/InsideCI/nego/src/utils/exceptions"
-	"log"
 	"net/http"
 )
 
@@ -26,12 +25,16 @@ func NewStudentController(db *driver.DB) *StudentController {
 }
 
 func (c *StudentController) Create(w http.ResponseWriter, r *http.Request) {
-	student := r.Context().Value("payload").(model.Student)
+	student := r.Context().Value("payload").(*model.Student)
+	if err := student.Valid(); err != nil {
+		utils.Throw(w, exceptions.BadRequest, err)
+		return
+	}
 
-	created, err := c.service.Create(c.db, student)
-
+	created, err := c.service.Create(c.db, *student)
 	if err != nil {
-		log.Println("[HANDLER]", err)
+		utils.Throw(w, exceptions.InternalError, err)
+		return
 	}
 
 	_ = json.NewEncoder(w).Encode(created)
@@ -42,7 +45,7 @@ func (c *StudentController) Fetch(w http.ResponseWriter, r *http.Request) {
 
 	page, err := c.service.Fetch(c.db, params)
 	if err != nil {
-		utils.Throw(w, exceptions.BadRequest, err)
+		utils.Throw(w, exceptions.InternalError, err)
 		return
 	}
 	_ = json.NewEncoder(w).Encode(page)
@@ -54,10 +57,8 @@ func (c *StudentController) FetchOne(w http.ResponseWriter, r *http.Request) {
 
 	student, err := c.service.FetchOne(c.db, registration)
 	if err != nil {
-		utils.Throw(w, exceptions.InvalidAttributes, err)
+		utils.Throw(w, exceptions.InternalError, err)
 		return
 	}
-
 	_ = json.NewEncoder(w).Encode(student)
-
 }
