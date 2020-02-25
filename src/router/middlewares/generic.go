@@ -3,6 +3,7 @@ package middlewares
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/InsideCI/nego/src/utils"
 	"github.com/InsideCI/nego/src/utils/constants"
@@ -60,14 +61,30 @@ func (g *GenericMiddleware) Payload(next http.Handler) http.Handler {
 			http.Error(w, http.StatusText(http.StatusNoContent), http.StatusNoContent)
 		}
 
-		out := g.output()
+		payload := g.output()
 
-		if err := json.NewDecoder(r.Body).Decode(out); err != nil {
+		if err := json.NewDecoder(r.Body).Decode(payload); err != nil {
 			utils.Throw(w, exceptions.BadRequest, err)
 			return
 		}
 
-		ctx := context.WithValue(r.Context(), "payload", out)
+		var validation []reflect.Value
+
+		f := reflect.ValueOf(payload).MethodByName("Valid")
+		if f.IsValid() {
+			validation = f.Call(validation)
+		}
+
+		if len(validation) > 0 {
+			val := reflect.ValueOf(validation[0]).Interface()
+			err := fmt.Sprintf("%v", val)
+			if err != "<nil>" {
+				utils.Throw(w, exceptions.BadRequest, errors.New(err))
+				return
+			}
+		}
+
+		ctx := context.WithValue(r.Context(), "payload", payload)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }

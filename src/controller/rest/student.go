@@ -26,10 +26,6 @@ func NewStudentController(db *driver.DB) *StudentController {
 
 func (c *StudentController) Create(w http.ResponseWriter, r *http.Request) {
 	student := r.Context().Value("payload").(*model.Student)
-	if err := student.Valid(); err != nil {
-		utils.Throw(w, exceptions.BadRequest, err)
-		return
-	}
 
 	created, err := c.service.Create(c.db, *student)
 	if err != nil {

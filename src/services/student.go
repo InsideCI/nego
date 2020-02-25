@@ -51,7 +51,11 @@ func (s *StudentService) Count(db *driver.DB) (int, error) {
 }
 
 func (s *StudentService) FetchOne(db *driver.DB, id string) (*model.Student, error) {
-	return s.repo.FetchByRegistration(db.Postgres, id)
+	tmp, err := s.repo.FetchOne(db.Postgres, id)
+	if err != nil {
+		return nil, err
+	}
+	return tmp.(*model.Student), err
 }
 
 func (s *StudentService) Exists(db *driver.DB, student *model.Student) bool {

@@ -28,15 +28,6 @@ func (r *StudentRepository) FetchByName(db *gorm.DB, name string) (*[]model.Stud
 	return &students, nil
 }
 
-func (r *StudentRepository) FetchByRegistration(db *gorm.DB, registration string) (*model.Student, error) {
-	var student model.Student
-	err := db.Where("matricula = ?", registration).First(&student).Error
-	if err != nil {
-		return nil, err
-	}
-	return &student, nil
-}
-
 func (r *StudentRepository) FetchByIdCourse(db *gorm.DB, idCourse string) ([]model.Student, error) {
 	var students []model.Student
 	err := db.Where("idCurso = ?", idCourse).First(&students).Error

@@ -34,10 +34,25 @@ func CreateDatabasesConnections() (*DB, error) {
 	}
 
 	log.Println("Connected to Postgres database. Starting migration...")
-	db.AutoMigrate(&model.Center{}, &model.Department{}, &model.Course{}, &model.Student{}, &model.Teacher{}, &model.GeneralStatistic{})
+
+	validateAndMigrate(db,
+		&model.Center{},
+		&model.Department{},
+		&model.Teacher{},
+		&model.Course{},
+		&model.Student{},
+		&model.GeneralStatistic{})
+
 	log.Println("Migration ended with no errors.")
 
 	return &DB{
 		Postgres: db,
 	}, nil
+}
+
+//validateAndMigrate checks if all models implement Nego interface in compile time.
+func validateAndMigrate(db *gorm.DB, models ...model.Nego) {
+	for _, v := range models {
+		db.AutoMigrate(v)
+	}
 }
