@@ -47,7 +47,7 @@ func (s *StudentService) Fetch(db *driver.DB, params map[string][]string) (*mode
 }
 
 func (s *StudentService) Count(db *driver.DB) (int, error) {
-	return s.repo.Count(db.Postgres, &model.Student{})
+	return s.repo.Count(db.Postgres)
 }
 
 func (s *StudentService) FetchOne(db *driver.DB, id string) (*model.Student, error) {

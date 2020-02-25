@@ -2,14 +2,17 @@
 [![Build Status](https://github.com/InsideCI/nego/workflows/NEGO/badge.svg)](https://github.com/InsideCI/nego/actions)
 [![Go Report Card](https://goreportcard.com/badge/github.com/InsideCI/nego)](https://goreportcard.com/report/github.com/InsideCI/nego)
 [![codecov](https://codecov.io/gh/InsideCI/nego/branch/master/graph/badge.svg)](https://codecov.io/gh/InsideCI/nego)
+[![TODOs](https://badgen.net/https/api.tickgit.com/badgen/github.com/InsideCI/nego)](https://www.tickgit.com/browse?repo=github.com/InsideCI/nego)
+[![Chat](https://badgen.net/badge/discord/chat?icon=discord)](https://discord.gg/jVdUJ75)
 
 NEGO is a UFPB SIGAA Restful API created with Golang for study purposes only, but it may fit your needs.
 
 ### MAIN FEATURES:
 
+- Readable and simple code.
 - Uses [GORM](github.com/jinzhu/gorm) as the default database management tool for a more dynamic approach to databases.
 - Router specification created with [CHI](github.com/go-chi/chi) reliable router structure.
-- Readable and simple code.
+- Generic repository and middlewares.
 - Multi database support for each resource.
 - Multi ARCH: structure created for both REST and gRPC support.
 

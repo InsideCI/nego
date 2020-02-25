@@ -43,6 +43,7 @@ func (g *GenericMiddleware) Fetch(next http.Handler) http.Handler {
 
 		//DEFAULT PARAMS
 		params["limit"] = append(params["limit"], strconv.Itoa(constants.MAXIMUM_FETCH))
+		params["offset"] = append(params["offset"], strconv.Itoa(0))
 
 		if len(keys) != 0 {
 			for key, value := range keys {
@@ -75,6 +76,7 @@ func (g *GenericMiddleware) Payload(next http.Handler) http.Handler {
 			validation = f.Call(validation)
 		}
 
+		//TODO: find a better way of handling validation value instead of using Sprintf.
 		if len(validation) > 0 {
 			val := reflect.ValueOf(validation[0]).Interface()
 			err := fmt.Sprintf("%v", val)

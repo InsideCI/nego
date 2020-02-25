@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"github.com/InsideCI/nego/src/model"
 	"github.com/jinzhu/gorm"
 	"reflect"
 )
@@ -23,9 +24,10 @@ func (r *GenericRepository) Create(db *gorm.DB, model interface{}) error {
 	return db.Create(model).Error
 }
 
-func (r *GenericRepository) Count(db *gorm.DB, model interface{}) (int, error) {
+func (r *GenericRepository) Count(db *gorm.DB) (int, error) {
 	var count int
-	if err := db.Model(model).Count(&count).Error; err != nil {
+	out := r.output()
+	if err := db.Model(out).Count(&count).Error; err != nil {
 		return 0, err
 	}
 	return count, nil
@@ -37,6 +39,11 @@ func (r *GenericRepository) Fetch(db *gorm.DB, limit int) (interface{}, error) {
 		return nil, err
 	}
 	return out, nil
+}
+
+func (r *GenericRepository) FetchWithPagination(db *gorm.DB, params map[string][]string) (*model.Page, error) {
+	//TODO: create pagination
+	return nil, nil
 }
 
 func (r *GenericRepository) FetchOne(db *gorm.DB, id string) (interface{}, error) {

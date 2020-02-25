@@ -47,7 +47,7 @@ func (c *StudentController) Fetch(w http.ResponseWriter, r *http.Request) {
 	_ = json.NewEncoder(w).Encode(page)
 }
 
-// FetchByMatricula uses id param as primary key search
+// FetchOne uses id param as primary key search
 func (c *StudentController) FetchOne(w http.ResponseWriter, r *http.Request) {
 	registration := r.Context().Value("id").(string)
 
