@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/InsideCI/nego/src/model"
 	"github.com/InsideCI/nego/src/utils"
 	"github.com/InsideCI/nego/src/utils/constants"
 	"github.com/InsideCI/nego/src/utils/exceptions"
@@ -26,6 +27,7 @@ func (g *GenericMiddleware) output() interface{} {
 func (g *GenericMiddleware) Identifier(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		id := chi.URLParam(r, "id")
+
 		_, err := strconv.ParseInt(fmt.Sprintf("%v", id), 10, 64)
 		if err != nil {
 			utils.Throw(w, exceptions.InvalidIdentifier, err)
@@ -37,13 +39,20 @@ func (g *GenericMiddleware) Identifier(next http.Handler) http.Handler {
 
 func (g *GenericMiddleware) Fetch(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		var (
+			limit  = constants.MAXIMUM_FETCH
+			offset = 0
+			page   = 0
+		)
+
 		keys := r.URL.Query()
 
 		params := make(map[string][]string)
 
 		//DEFAULT PARAMS
-		params["limit"] = append(params["limit"], strconv.Itoa(constants.MAXIMUM_FETCH))
-		params["offset"] = append(params["offset"], strconv.Itoa(0))
+		params["limit"] = append(params["limit"], strconv.Itoa(limit))
+		params["offset"] = append(params["offset"], strconv.Itoa(offset))
+		params["page"] = append(params["offset"], strconv.Itoa(page))
 
 		if len(keys) != 0 {
 			for key, value := range keys {
@@ -51,7 +60,14 @@ func (g *GenericMiddleware) Fetch(next http.Handler) http.Handler {
 			}
 		}
 
-		ctx := context.WithValue(r.Context(), "params", params)
+		queryParams := model.QueryParams{
+			Limit:  limit,
+			Offset: offset,
+			Page:   page,
+			Order:  params["order"],
+		}
+
+		ctx := context.WithValue(r.Context(), "queryParams", queryParams)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }

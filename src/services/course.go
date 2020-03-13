@@ -4,7 +4,6 @@ import (
 	"github.com/InsideCI/nego/src/driver"
 	"github.com/InsideCI/nego/src/model"
 	"github.com/InsideCI/nego/src/repository"
-	"strconv"
 )
 
 type CourseService struct {
@@ -35,12 +34,7 @@ func (s *CourseService) Fetch(db *driver.DB, params map[string][]string) (*model
 	if name, ok := params["name"]; ok {
 		fetched, err = s.repo.FetchByName(db.Postgres, name[0])
 	} else {
-		limit, err := strconv.Atoi(params["limit"][0])
-		temp, err := s.repo.Fetch(db.Postgres, limit)
-		if err != nil {
-			return nil, err
-		}
-		fetched = temp.(*[]model.Course)
+		return s.repo.FetchWithPagination(db.Postgres, params)
 	}
 
 	return model.NewPage(totalCourses, len(*fetched), fetched), nil
