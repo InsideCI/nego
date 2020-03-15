@@ -1,10 +1,11 @@
-package repository
+package repositories
 
 import (
-	"github.com/InsideCI/nego/src/model"
+	"github.com/InsideCI/nego/src/models"
+	"github.com/InsideCI/nego/src/utils/constants"
 	"github.com/jinzhu/gorm"
+	"gopkg.in/jeevatkm/go-model.v1"
 	"reflect"
-	"strconv"
 )
 
 type GenericRepository struct {
@@ -42,11 +43,12 @@ func (r *GenericRepository) Fetch(db *gorm.DB, limit int) (interface{}, error) {
 	return out, nil
 }
 
-func (r *GenericRepository) FetchWithPagination(db *gorm.DB, params map[string][]string) (*model.Page, error) {
+func (r *GenericRepository) FetchWithPagination(db *gorm.DB, params models.QueryParams, example interface{}) (*models.Page, error) {
 	var (
 		out    = r.slice()
 		total  int
 		offset int
+		limit  int
 		err    error
 	)
 
@@ -54,24 +56,31 @@ func (r *GenericRepository) FetchWithPagination(db *gorm.DB, params map[string][
 		return nil, err
 	}
 
-	limit, _ := strconv.Atoi(params["limit"][0])
-	if limit < 0 {
-		limit = 0
-	}
-	page, _ := strconv.Atoi(params["page"][0])
-	if page < 0 {
-		offset = 0
+	if params.Limit <= 0 || params.Limit > constants.MAXIMUM_FETCH {
+		limit = constants.MAXIMUM_FETCH
 	} else {
-		offset = page * limit
+		limit = params.Limit
 	}
 
-	if err := db.Offset(offset).Limit(limit).Find(out).Error; err != nil {
+	if params.Page < 0 {
+		offset = 0
+	} else {
+		offset = params.Page * limit
+	}
+
+	tx := db.Debug().Offset(offset).Limit(limit)
+
+	if !model.IsZero(example) {
+		tx = tx.Where(example) //TODO: modify this transaction to LIKE instead of absolute
+	}
+
+	if err := tx.Find(out).Error; err != nil {
 		return nil, err
 	}
 
 	totalPages := total / limit
 
-	return model.NewPage(total, offset, page, totalPages, out), nil
+	return models.NewPage(total, offset, params.Page, totalPages, out), nil
 }
 
 func (r *GenericRepository) FetchOne(db *gorm.DB, id string) (interface{}, error) {

@@ -2,56 +2,44 @@ package services
 
 import (
 	"github.com/InsideCI/nego/src/driver"
-	"github.com/InsideCI/nego/src/model"
-	"github.com/InsideCI/nego/src/repository"
+	"github.com/InsideCI/nego/src/models"
+	"github.com/InsideCI/nego/src/repositories"
 )
 
 type StudentService struct {
-	repo *repository.StudentRepository
+	repo *repositories.StudentRepository
 }
 
 func NewStudentService() *StudentService {
 	return &StudentService{
-		repo: repository.NewStudentRepository(),
+		repo: repositories.NewStudentRepository(),
 	}
 }
 
-func (s *StudentService) Create(db *driver.DB, student model.Student) (*model.Student, error) {
+func (s *StudentService) Create(db *driver.DB, student models.Student) (*models.Student, error) {
 	//TODO: check and throw error if student' course doesn't exists in the database.
 	err := s.repo.Create(db.Postgres, &student)
 	return &student, err
 }
 
-func (s *StudentService) Fetch(db *driver.DB, params map[string][]string) (*model.Page, error) {
-	var err error
-	var fetched *[]model.Student
-	var totalStudents int
+func (s *StudentService) Fetch(db *driver.DB, params models.QueryParams, example models.Student) (*models.Page, error) {
 
-	if totalStudents, err = s.Count(db); err != nil {
-		return nil, err
-	}
+	return s.repo.FetchWithPagination(db.Postgres, params, example)
 
-	if name, ok := params["name"]; ok {
-		fetched, err = s.repo.FetchByName(db.Postgres, name[0])
-	} else {
-		return s.repo.FetchWithPagination(db.Postgres, params)
-	}
-
-	return model.NewPage(totalStudents, len(*fetched), fetched), nil
 }
 
 func (s *StudentService) Count(db *driver.DB) (int, error) {
 	return s.repo.Count(db.Postgres)
 }
 
-func (s *StudentService) FetchOne(db *driver.DB, id string) (*model.Student, error) {
+func (s *StudentService) FetchOne(db *driver.DB, id string) (*models.Student, error) {
 	tmp, err := s.repo.FetchOne(db.Postgres, id)
 	if err != nil {
 		return nil, err
 	}
-	return tmp.(*model.Student), err
+	return tmp.(*models.Student), err
 }
 
-func (s *StudentService) Exists(db *driver.DB, student *model.Student) bool {
+func (s *StudentService) Exists(db *driver.DB, student *models.Student) bool {
 	return s.repo.Exists(db.Postgres, student)
 }

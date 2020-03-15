@@ -1,4 +1,4 @@
-package model
+package models
 
 type Page struct {
 	Total      int         `json:"totalElements"`

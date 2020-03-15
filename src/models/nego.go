@@ -1,4 +1,4 @@
-package model
+package models
 
 //Nego is a generic interface that all NEGO models should implement
 type Nego interface {

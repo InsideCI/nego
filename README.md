@@ -18,8 +18,7 @@ NEGO is a UFPB SIGAA Restful API created with Golang for study purposes only, bu
 
 ### AVAILABLE RESOURCES:
 
-`/centers`
-
+`/centers` or `/centers/1856`
 ```json
 {
   "id": 1856,
@@ -27,7 +26,7 @@ NEGO is a UFPB SIGAA Restful API created with Golang for study purposes only, bu
 }
 ```
 
-`/departments`
+`/departments` or `/departments/2151`
 ```json
 {
   "id": 2151,
@@ -35,7 +34,7 @@ NEGO is a UFPB SIGAA Restful API created with Golang for study purposes only, bu
 }
 ```
 
-`/teachers`
+`/teachers` or `/teachers/1743917`
 ```json
 {
   "id": 1743917,
@@ -45,7 +44,7 @@ NEGO is a UFPB SIGAA Restful API created with Golang for study purposes only, bu
 }
 ```
 
-`/courses`
+`/courses` or `/courses/1626865`
 ```json
 {
   "id": 1626865,
@@ -57,7 +56,7 @@ NEGO is a UFPB SIGAA Restful API created with Golang for study purposes only, bu
 }
 ```
 
-`/students`
+`/students` or `/students/11409558`
 ```json
 {
   "matricula": 11409558,
@@ -66,7 +65,7 @@ NEGO is a UFPB SIGAA Restful API created with Golang for study purposes only, bu
 }
 ```
 
-`/classes`
+`/classes` or `/classes/GDSCO0081`
 ```json
 {
   "id": "GDSCO0081",

@@ -2,42 +2,30 @@ package services
 
 import (
 	"github.com/InsideCI/nego/src/driver"
-	"github.com/InsideCI/nego/src/model"
-	"github.com/InsideCI/nego/src/repository"
+	"github.com/InsideCI/nego/src/models"
+	"github.com/InsideCI/nego/src/repositories"
 )
 
 type CourseService struct {
-	repo *repository.CourseRepository
+	repo *repositories.CourseRepository
 }
 
 func NewCourseService() *CourseService {
 	return &CourseService{
-		repo: repository.NewCourseRepository(),
+		repo: repositories.NewCourseRepository(),
 	}
 }
 
-func (s *CourseService) Create(db *driver.DB, course model.Course) (*model.Course, error) {
+func (s *CourseService) Create(db *driver.DB, course models.Course) (*models.Course, error) {
 	//TODO: check if relations exists
 	err := s.repo.Create(db.Postgres, &course)
 	return &course, err
 }
 
-func (s *CourseService) Fetch(db *driver.DB, params map[string][]string) (*model.Page, error) {
-	var err error
-	var fetched *[]model.Course
-	var totalCourses int
+func (s *CourseService) Fetch(db *driver.DB, params models.QueryParams, example models.Student) (*models.Page, error) {
 
-	if totalCourses, err = s.Count(db); err != nil {
-		return nil, err
-	}
+	return s.repo.FetchWithPagination(db.Postgres, params, example)
 
-	if name, ok := params["name"]; ok {
-		fetched, err = s.repo.FetchByName(db.Postgres, name[0])
-	} else {
-		return s.repo.FetchWithPagination(db.Postgres, params)
-	}
-
-	return model.NewPage(totalCourses, len(*fetched), fetched), nil
 }
 
 func (s *CourseService) Count(db *driver.DB) (int, error) {

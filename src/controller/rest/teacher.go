@@ -3,7 +3,7 @@ package rest
 import (
 	"encoding/json"
 	"github.com/InsideCI/nego/src/driver"
-	"github.com/InsideCI/nego/src/model"
+	"github.com/InsideCI/nego/src/models"
 	"github.com/InsideCI/nego/src/services"
 	"github.com/InsideCI/nego/src/utils"
 	"github.com/InsideCI/nego/src/utils/exceptions"
@@ -24,7 +24,7 @@ func NewTeacherController(db *driver.DB) *TeacherController {
 }
 
 func (c *TeacherController) Create(w http.ResponseWriter, r *http.Request) {
-	teacher := r.Context().Value("payload").(model.Teacher)
+	teacher := r.Context().Value("payload").(models.Teacher)
 
 	created, err := c.service.Create(c.db, teacher)
 

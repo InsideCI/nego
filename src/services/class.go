@@ -2,16 +2,16 @@ package services
 
 import (
 	"github.com/InsideCI/nego/src/driver"
-	"github.com/InsideCI/nego/src/repository"
+	"github.com/InsideCI/nego/src/repositories"
 )
 
 type ClassService struct {
-	repo *repository.ClassRepository
+	repo *repositories.ClassRepository
 }
 
 func NewClassService() *ClassService {
 	return &ClassService{
-		repo: repository.NewClassRepository(),
+		repo: repositories.NewClassRepository(),
 	}
 }
 

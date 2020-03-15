@@ -1,6 +1,6 @@
-package repository
+package repositories
 
-import "github.com/InsideCI/nego/src/model"
+import "github.com/InsideCI/nego/src/models"
 
 type TeacherRepository struct {
 	GenericRepository
@@ -8,6 +8,6 @@ type TeacherRepository struct {
 
 func NewTeacherRepository() *TeacherRepository {
 	return &TeacherRepository{
-		struct{ Type interface{} }{Type: model.Teacher{}},
+		struct{ Type interface{} }{Type: models.Teacher{}},
 	}
 }

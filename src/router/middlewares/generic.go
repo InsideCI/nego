@@ -5,11 +5,11 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/InsideCI/nego/src/model"
+	"github.com/InsideCI/nego/src/models"
 	"github.com/InsideCI/nego/src/utils"
-	"github.com/InsideCI/nego/src/utils/constants"
 	"github.com/InsideCI/nego/src/utils/exceptions"
 	"github.com/go-chi/chi"
+	"github.com/mitchellh/mapstructure"
 	"net/http"
 	"reflect"
 	"strconv"
@@ -21,6 +21,48 @@ type GenericMiddleware struct {
 
 func (g *GenericMiddleware) output() interface{} {
 	out := reflect.New(reflect.TypeOf(g.Type)).Interface()
+	return out
+}
+
+func (g *GenericMiddleware) exampleResolver(keys map[string][]string) interface{} {
+	out := g.output()
+	example := map[string]string{}
+
+	for key, value := range keys {
+		example[key] = value[len(value)-1]
+	}
+
+	cfg := &mapstructure.DecoderConfig{
+		Result:  out,
+		TagName: "json",
+	}
+	decoder, _ := mapstructure.NewDecoder(cfg)
+	decoder.Decode(example)
+
+	return out
+}
+
+func (g *GenericMiddleware) paramsResolver(keys map[string][]string) models.QueryParams {
+	out := models.QueryParams{}
+	params := map[string]interface{}{}
+
+	for key, value := range keys {
+		params[key] = value[len(value)-1]
+	}
+
+	cfg := &mapstructure.DecoderConfig{
+		Result:  &out,
+		TagName: "json",
+	}
+	decoder, _ := mapstructure.NewDecoder(cfg)
+	decoder.Decode(params)
+
+	//TODO: params not being resolved
+
+	if sort, ok := keys["sort"]; ok {
+		out.Order = sort
+	}
+
 	return out
 }
 
@@ -39,40 +81,18 @@ func (g *GenericMiddleware) Identifier(next http.Handler) http.Handler {
 
 func (g *GenericMiddleware) Fetch(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		var (
-			limit  = constants.MAXIMUM_FETCH
-			offset = 0
-			page   = 0
-		)
 
 		keys := r.URL.Query()
+		example := g.exampleResolver(keys)
+		params := g.paramsResolver(keys)
 
-		params := make(map[string][]string)
-
-		//DEFAULT PARAMS
-		params["limit"] = append(params["limit"], strconv.Itoa(limit))
-		params["offset"] = append(params["offset"], strconv.Itoa(offset))
-		params["page"] = append(params["offset"], strconv.Itoa(page))
-
-		if len(keys) != 0 {
-			for key, value := range keys {
-				params[key] = value
-			}
-		}
-
-		queryParams := model.QueryParams{
-			Limit:  limit,
-			Offset: offset,
-			Page:   page,
-			Order:  params["order"],
-		}
-
-		ctx := context.WithValue(r.Context(), "queryParams", queryParams)
+		queryContext := context.WithValue(r.Context(), "params", params)
+		ctx := context.WithValue(queryContext, "example", example)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }
 
-func (g *GenericMiddleware) Payload(next http.Handler) http.Handler {
+func (g *GenericMiddleware) Persist(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.ContentLength == 0 {
 			http.Error(w, http.StatusText(http.StatusNoContent), http.StatusNoContent)

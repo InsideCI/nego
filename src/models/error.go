@@ -1,4 +1,4 @@
-package model
+package models
 
 type NegoError struct {
 	Err     string `json:"error"`

@@ -3,7 +3,7 @@ package rest
 import (
 	"encoding/json"
 	"github.com/InsideCI/nego/src/driver"
-	"github.com/InsideCI/nego/src/model"
+	"github.com/InsideCI/nego/src/models"
 	"github.com/InsideCI/nego/src/services"
 	"github.com/InsideCI/nego/src/utils"
 	"github.com/InsideCI/nego/src/utils/exceptions"
@@ -25,7 +25,7 @@ func NewStudentController(db *driver.DB) *StudentController {
 }
 
 func (c *StudentController) Create(w http.ResponseWriter, r *http.Request) {
-	student := r.Context().Value("payload").(*model.Student)
+	student := r.Context().Value("payload").(*models.Student)
 
 	created, err := c.service.Create(c.db, *student)
 	if err != nil {
@@ -37,9 +37,10 @@ func (c *StudentController) Create(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *StudentController) Fetch(w http.ResponseWriter, r *http.Request) {
-	params := r.Context().Value("params").(map[string][]string)
+	params := r.Context().Value("params").(models.QueryParams)
+	example := r.Context().Value("example").(*models.Student)
 
-	page, err := c.service.Fetch(c.db, params)
+	page, err := c.service.Fetch(c.db, params, *example)
 	if err != nil {
 		utils.Throw(w, exceptions.InternalError, err)
 		return

@@ -11,6 +11,8 @@ require (
 	github.com/gojp/goreportcard v0.0.0-20200102082842-9f8184163627 // indirect
 	github.com/jinzhu/gorm v1.9.11
 	github.com/joho/godotenv v1.3.0
+	github.com/mitchellh/mapstructure v1.1.2
 	github.com/onsi/ginkgo v1.12.0
 	github.com/onsi/gomega v1.9.0
+	gopkg.in/jeevatkm/go-model.v1 v1.1.0
 )

@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/InsideCI/nego/src/model"
+	"github.com/InsideCI/nego/src/models"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres" //postgres dialect
 )
@@ -36,12 +36,12 @@ func CreateDatabasesConnections() (*DB, error) {
 	log.Println("Connected to Postgres database. Starting migration...")
 
 	validateAndMigrate(db,
-		&model.Center{},
-		&model.Department{},
-		&model.Teacher{},
-		&model.Course{},
-		&model.Student{},
-		&model.GeneralStatistic{})
+		&models.Center{},
+		&models.Department{},
+		&models.Teacher{},
+		&models.Course{},
+		&models.Student{},
+		&models.GeneralStatistic{})
 
 	log.Println("Migration ended with no errors.")
 
@@ -51,7 +51,7 @@ func CreateDatabasesConnections() (*DB, error) {
 }
 
 //validateAndMigrate checks if all models implement Nego interface in compile time.
-func validateAndMigrate(db *gorm.DB, models ...model.Nego) {
+func validateAndMigrate(db *gorm.DB, models ...models.Nego) {
 	for _, v := range models {
 		db.AutoMigrate(v)
 	}
