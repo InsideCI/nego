@@ -9,6 +9,7 @@ require (
 	github.com/go-chi/cors v1.0.0
 	github.com/go-playground/validator/v10 v10.1.0
 	github.com/gojp/goreportcard v0.0.0-20200102082842-9f8184163627 // indirect
+	github.com/iancoleman/strcase v0.0.0-20191112232945-16388991a334
 	github.com/jinzhu/gorm v1.9.11
 	github.com/joho/godotenv v1.3.0
 	github.com/mitchellh/mapstructure v1.1.2

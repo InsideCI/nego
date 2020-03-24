@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/InsideCI/nego/src/models"
 	"github.com/InsideCI/nego/src/utils/constants"
+	"github.com/iancoleman/strcase"
 	"github.com/jinzhu/gorm"
 	"gopkg.in/jeevatkm/go-model.v1"
 	"reflect"
@@ -69,23 +70,26 @@ func (r *GenericRepository) FetchWithPagination(db *gorm.DB, params models.Query
 	if !model.IsZero(example) {
 		fields, _ := model.Fields(example)
 		for _, field := range fields {
-			if value, _ := model.Get(example, field.Name); value != nil && value != 0 {
-				valueStr := fmt.Sprintf("%v", value)
-				tx = tx.Where(field.Tag.Get("json")+" ILIKE ?", "%"+valueStr+"%")
+			if value, _ := model.Get(example, field.Name); value != "" && value != 0 {
+				if reflect.TypeOf(value).Kind() != reflect.String {
+					tx = tx.Where(strcase.ToSnake(field.Tag.Get("json"))+" = ?", value)
+				} else {
+					valueStr := fmt.Sprintf("%v", value)
+					tx = tx.Where(strcase.ToSnake(field.Tag.Get("json"))+" ILIKE ?", "%"+valueStr+"%")
+				}
 			}
 		}
 	}
-	tx.Model(out).Count(&payloadSize)
 
 	//TODO: implement sort by using params.Order
 
 	tx = tx.Offset(offset).Limit(limit)
 
-	if err := tx.Find(out).Error; err != nil {
+	if err := tx.Find(out).Count(&payloadSize).Error; err != nil {
 		return nil, err
 	}
 
-	totalPages := payloadSize / limit
+	totalPages := (payloadSize / limit) + 1
 
 	return models.NewPage(payloadSize, limit, params.Page, totalPages, reflect.ValueOf(out).Elem().Len(), out), nil
 }

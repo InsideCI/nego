@@ -26,15 +26,16 @@ func (g *GenericMiddleware) output() interface{} {
 
 func (g *GenericMiddleware) exampleResolver(keys map[string][]string) interface{} {
 	out := g.output()
-	example := map[string]string{}
+	example := map[string]interface{}{}
 
 	for key, value := range keys {
 		example[key] = value[len(value)-1]
 	}
 
 	cfg := &mapstructure.DecoderConfig{
-		Result:  out,
-		TagName: "json",
+		Result:           out,
+		WeaklyTypedInput: true,
+		TagName:          "json",
 	}
 	decoder, _ := mapstructure.NewDecoder(cfg)
 	decoder.Decode(example)
