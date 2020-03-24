@@ -7,14 +7,17 @@
 
 NEGO is a UFPB SIGAA Restful API created with Golang for study purposes only, but it may fit your needs.
 
+Feel free to use and contribute.
+
 ### MAIN FEATURES:
 
-- Readable and simple code.
-- Uses [GORM](github.com/jinzhu/gorm) as the default database management tool for a more dynamic approach to databases.
-- Router specification created with [CHI](github.com/go-chi/chi) reliable router structure.
-- Generic repository and middlewares.
-- Multi database support for each resource.
-- Multi ARCH: structure created for both REST and gRPC support.
+- Readable and simple code;
+- Uses [GORM](github.com/jinzhu/gorm) as the default database management tool for a more dynamic and generic approach to databases;
+- Router specification created with [CHI](github.com/go-chi/chi) reliable router structure;
+- Generic repository and middlewares;
+- Multi database support for each resource;
+- Multi ARCH: created for both REST and gRPC support in mind;
+- Complete fetching capabilities: pagination, sorting, filtering.
 
 ### AVAILABLE RESOURCES:
 
@@ -77,9 +80,24 @@ NEGO is a UFPB SIGAA Restful API created with Golang for study purposes only, bu
 }
 ```
 
-...and more to come.
+### FETCHING FEATURES:
 
-Today's API version is 'v1'.
+|Type|Example| 
+|----|----| 
+|Sorting|`students?sort=nome`, `students?sort=idCurso`|
+|Filtering|`students?nome=cleanderson`, `students?idCurso=1626865`|
+|Pagination|`students?page=0`|
+
+And of course, you can use them all at the same time:
+
+`students?sort=nome&sort=id&nome=maria&page=10`
+
+#### OBSERVATIONS: 
+- Any field of the models described above can be used as a filter.
+- If more than one value to the parameter was provived, only the last will be considered, unless for `sort` parameter.
+
+
+...and more to come.
 
 ### MODELS RELATION LOGIC:
 
@@ -142,7 +160,7 @@ Before everything:
 
 Your must create a `app.env` file on root folder and fill those parameters:
 
-```yaml
+```.env
 db_name=yourDatabaseName
 db_pass=yourDatabasePassword
 db_user=yourDatabaseLogin
@@ -158,6 +176,6 @@ And then, you can run this project by:
 
 `./nego`
 
-You now can make requests with any REST client as [Insomnia](https://github.com/getinsomnia) or web application at the address:
+You now can make requests with any REST client as [Insomnia](https://github.com/getinsomnia) or web any application at the address:
 
 `http://localhost:yourApiPort`
