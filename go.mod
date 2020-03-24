@@ -15,5 +15,6 @@ require (
 	github.com/mitchellh/mapstructure v1.1.2
 	github.com/onsi/ginkgo v1.12.0
 	github.com/onsi/gomega v1.9.0
+	github.com/thoas/go-funk v0.6.0
 	gopkg.in/jeevatkm/go-model.v1 v1.1.0
 )

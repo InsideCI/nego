@@ -51,6 +51,7 @@ func (r *GenericRepository) FetchWithPagination(db *gorm.DB, params models.Query
 		offset      int
 		limit       int
 		payloadSize int
+		fields, _   = model.Fields(example)
 	)
 
 	if params.Limit <= 0 || params.Limit > constants.MAXIMUM_FETCH {
@@ -68,7 +69,7 @@ func (r *GenericRepository) FetchWithPagination(db *gorm.DB, params models.Query
 	tx := db.Debug().Where("")
 
 	if !model.IsZero(example) {
-		fields, _ := model.Fields(example)
+
 		for _, field := range fields {
 			if value, _ := model.Get(example, field.Name); value != "" && value != 0 {
 				if reflect.TypeOf(value).Kind() != reflect.String {
@@ -83,7 +84,15 @@ func (r *GenericRepository) FetchWithPagination(db *gorm.DB, params models.Query
 
 	tx.Model(out).Count(&payloadSize)
 
-	//TODO: implement sort by using params.Order
+	if params.Order != nil {
+		for _, field := range params.Order {
+			for _, exampleField := range fields {
+				if field == exampleField.Tag.Get("json") {
+					tx = tx.Order(field)
+				}
+			}
+		}
+	}
 
 	tx = tx.Offset(offset).Limit(limit)
 

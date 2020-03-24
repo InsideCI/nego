@@ -54,7 +54,7 @@ func (c *StudentController) FetchOne(w http.ResponseWriter, r *http.Request) {
 
 	student, err := c.service.FetchOne(c.db, registration)
 	if err != nil {
-		utils.Throw(w, exceptions.InternalError, err)
+		utils.Throw(w, exceptions.NotFound, err)
 		return
 	}
 	_ = json.NewEncoder(w).Encode(student)
