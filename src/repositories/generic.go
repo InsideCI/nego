@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"fmt"
 	"github.com/InsideCI/nego/src/models"
 	"github.com/InsideCI/nego/src/utils/constants"
 	"github.com/jinzhu/gorm"
@@ -45,16 +46,11 @@ func (r *GenericRepository) Fetch(db *gorm.DB, limit int) (interface{}, error) {
 
 func (r *GenericRepository) FetchWithPagination(db *gorm.DB, params models.QueryParams, example interface{}) (*models.Page, error) {
 	var (
-		out    = r.slice()
-		total  int
-		offset int
-		limit  int
-		err    error
+		out         = r.slice()
+		offset      int
+		limit       int
+		payloadSize int
 	)
-
-	if total, err = r.Count(db); err != nil {
-		return nil, err
-	}
 
 	if params.Limit <= 0 || params.Limit > constants.MAXIMUM_FETCH {
 		limit = constants.MAXIMUM_FETCH
@@ -68,19 +64,30 @@ func (r *GenericRepository) FetchWithPagination(db *gorm.DB, params models.Query
 		offset = params.Page * limit
 	}
 
-	tx := db.Debug().Offset(offset).Limit(limit)
+	tx := db.Debug().Where("")
 
 	if !model.IsZero(example) {
-		tx = tx.Where(example) //TODO: modify this transaction to LIKE instead of absolute
+		fields, _ := model.Fields(example)
+		for _, field := range fields {
+			if value, _ := model.Get(example, field.Name); value != nil && value != 0 {
+				valueStr := fmt.Sprintf("%v", value)
+				tx = tx.Where(field.Tag.Get("json")+" ILIKE ?", "%"+valueStr+"%")
+			}
+		}
 	}
+	tx.Model(out).Count(&payloadSize)
+
+	//TODO: implement sort by using params.Order
+
+	tx = tx.Offset(offset).Limit(limit)
 
 	if err := tx.Find(out).Error; err != nil {
 		return nil, err
 	}
 
-	totalPages := total / limit
+	totalPages := payloadSize / limit
 
-	return models.NewPage(total, offset, params.Page, totalPages, out), nil
+	return models.NewPage(payloadSize, limit, params.Page, totalPages, reflect.ValueOf(out).Elem().Len(), out), nil
 }
 
 func (r *GenericRepository) FetchOne(db *gorm.DB, id string) (interface{}, error) {

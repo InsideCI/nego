@@ -42,23 +42,15 @@ func (g *GenericMiddleware) exampleResolver(keys map[string][]string) interface{
 	return out
 }
 
-func (g *GenericMiddleware) paramsResolver(keys map[string][]string) models.QueryParams {
+func (g *GenericMiddleware) paramsResolver(keys map[string][]string) interface{} {
 	out := models.QueryParams{}
-	params := map[string]interface{}{}
 
-	for key, value := range keys {
-		params[key] = value[len(value)-1]
+	if limit, ok := keys["limit"]; ok {
+		out.Limit, _ = strconv.Atoi(limit[len(limit)-1])
 	}
-
-	cfg := &mapstructure.DecoderConfig{
-		Result:  &out,
-		TagName: "json",
+	if page, ok := keys["page"]; ok {
+		out.Page, _ = strconv.Atoi(page[len(page)-1])
 	}
-	decoder, _ := mapstructure.NewDecoder(cfg)
-	decoder.Decode(params)
-
-	//TODO: params not being resolved
-
 	if sort, ok := keys["sort"]; ok {
 		out.Order = sort
 	}

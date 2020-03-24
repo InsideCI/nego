@@ -1,19 +1,21 @@
 package models
 
 type Page struct {
-	Total      int         `json:"totalElements"`
-	Offset     int         `json:"offset"`
-	Page       int         `json:"page"`
-	TotalPages int         `json:"totalPages"`
-	Payload    interface{} `json:"payload"`
+	Total       int         `json:"totalElements"`
+	TotalPages  int         `json:"totalPages"`
+	Limit       int         `json:"limit"`
+	Page        int         `json:"page"`
+	PayloadSize int         `json:"payloadSize"`
+	Payload     interface{} `json:"payload"`
 }
 
-func NewPage(total, offset, page, totalPages int, payload interface{}) *Page {
+func NewPage(total, limit, page, totalPages, payloadSize int, payload interface{}) *Page {
 	return &Page{
-		Total:      total,
-		Offset:     offset,
-		Page:       page,
-		TotalPages: totalPages,
-		Payload:    payload,
+		Total:       total,
+		Limit:       limit,
+		Page:        page,
+		TotalPages:  totalPages,
+		PayloadSize: payloadSize,
+		Payload:     payload,
 	}
 }
