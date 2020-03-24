@@ -92,7 +92,7 @@ func (r *GenericRepository) FetchWithPagination(db *gorm.DB, params models.Query
 		for _, field := range params.Order {
 			for _, exampleField := range fields {
 				if field == exampleField.Tag.Get("json") {
-					tx = tx.Order(field)
+					tx = tx.Order(strcase.ToSnake(field))
 				}
 			}
 		}
