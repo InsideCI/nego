@@ -81,11 +81,13 @@ func (r *GenericRepository) FetchWithPagination(db *gorm.DB, params models.Query
 		}
 	}
 
+	tx.Model(out).Count(&payloadSize)
+
 	//TODO: implement sort by using params.Order
 
 	tx = tx.Offset(offset).Limit(limit)
 
-	if err := tx.Find(out).Count(&payloadSize).Error; err != nil {
+	if err := tx.Find(out).Error; err != nil {
 		return nil, err
 	}
 
