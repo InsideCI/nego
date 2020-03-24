@@ -66,6 +66,7 @@ func (g *GenericMiddleware) Identifier(next http.Handler) http.Handler {
 		_, err := strconv.ParseInt(fmt.Sprintf("%v", id), 10, 64)
 		if err != nil {
 			utils.Throw(w, exceptions.InvalidIdentifier, err)
+			return
 		}
 		ctx := context.WithValue(r.Context(), "id", id)
 		next.ServeHTTP(w, r.WithContext(ctx))
