@@ -93,9 +93,8 @@ And of course, you can use them all at the same time:
 `students?sort=nome&sort=id&nome=maria&page=10`
 
 #### OBSERVATIONS: 
-- Any field of the models described above can be used as a filter.
-- If more than one value to the parameter was provived, only the last will be considered, unless for `sort` parameter.
-
+- Any field of the models described above can be used as a filter as long as it is written in lower camel case: `idCurso`.
+- If more than one value to the parameter was provived, only the last will be considered, except the `sort` parameter.
 
 ...and more to come.
 

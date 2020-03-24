@@ -82,9 +82,13 @@ func (r *GenericRepository) FetchWithPagination(db *gorm.DB, params models.Query
 		}
 	}
 
-	tx.Model(out).Count(&payloadSize)
+	counted := make(chan bool, 1)
+	go func() {
+		tx.Model(out).Count(&payloadSize)
+		counted <- true
+	}()
 
-	if params.Order != nil {
+	if len(params.Order) != 0 {
 		for _, field := range params.Order {
 			for _, exampleField := range fields {
 				if field == exampleField.Tag.Get("json") {
@@ -94,11 +98,8 @@ func (r *GenericRepository) FetchWithPagination(db *gorm.DB, params models.Query
 		}
 	}
 
-	tx = tx.Offset(offset).Limit(limit)
-
-	if err := tx.Find(out).Error; err != nil {
-		return nil, err
-	}
+	tx = tx.Offset(offset).Limit(limit).Find(out)
+	<-counted
 
 	totalPages := (payloadSize / limit) + 1
 
