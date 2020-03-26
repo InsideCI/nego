@@ -8,9 +8,9 @@ import (
 	"github.com/go-chi/chi"
 )
 
-func NewTeacherRouter(db *driver.DB) func(r chi.Router) {
-	generic := middlewares.GenericMiddleware{Type: models.Teacher{}}
-	handlers := rest.NewTeacherController(db)
+func NewCourseRouter(db *driver.DB) func(r chi.Router) {
+	generic := middlewares.GenericMiddleware{Type: models.Course{}}
+	handlers := rest.NewCourseController(db)
 
 	return func(r chi.Router) {
 		// teachers

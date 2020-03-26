@@ -21,12 +21,11 @@ func (s *TeacherService) Create(db *driver.DB, teacher models.Teacher) (*models.
 	return &teacher, err
 }
 
-func (s *TeacherService) Fetch(db *driver.DB, teacher models.Teacher) (*models.Teacher, error) {
-	err := s.repo.Create(db.Postgres, &teacher)
-	return &teacher, err
+func (s *TeacherService) Fetch(db *driver.DB, params models.QueryParams, example models.Teacher) (*models.Page, error) {
+	return s.repo.FetchWithPagination(db.Postgres, params, example)
 }
 
-func (s *TeacherService) FetchOne(db *driver.DB, id string) (*models.Student, error) {
+func (s *TeacherService) FetchOne(db *driver.DB, id string) (*models.Teacher, error) {
 	temp, err := s.repo.FetchOne(db.Postgres, id)
-	return temp.(*models.Student), err
+	return temp.(*models.Teacher), err
 }

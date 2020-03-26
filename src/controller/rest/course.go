@@ -10,22 +10,22 @@ import (
 	"net/http"
 )
 
-type TeacherController struct {
+type CourseController struct {
 	db      *driver.DB
-	service *services.TeacherService
+	service *services.CourseService
 }
 
-func NewTeacherController(db *driver.DB) *TeacherController {
-	return &TeacherController{
+func NewCourseController(db *driver.DB) *CourseController {
+	return &CourseController{
 		db:      db,
-		service: services.NewTeacherService(),
+		service: services.NewCourseService(),
 	}
 }
 
-func (c *TeacherController) Create(w http.ResponseWriter, r *http.Request) {
-	teacher := r.Context().Value("payload").(*models.Teacher)
+func (c *CourseController) Create(w http.ResponseWriter, r *http.Request) {
+	course := r.Context().Value("payload").(*models.Course)
 
-	created, err := c.service.Create(c.db, *teacher)
+	created, err := c.service.Create(c.db, *course)
 	if err != nil {
 		utils.Throw(w, exceptions.BadRequest, err)
 		return
@@ -34,9 +34,9 @@ func (c *TeacherController) Create(w http.ResponseWriter, r *http.Request) {
 	_ = json.NewEncoder(w).Encode(created)
 }
 
-func (c *TeacherController) Fetch(w http.ResponseWriter, r *http.Request) {
+func (c *CourseController) Fetch(w http.ResponseWriter, r *http.Request) {
 	params := r.Context().Value("params").(models.QueryParams)
-	example := r.Context().Value("example").(*models.Teacher)
+	example := r.Context().Value("example").(*models.Course)
 
 	page, err := c.service.Fetch(c.db, params, *example)
 	if err != nil {
@@ -47,7 +47,7 @@ func (c *TeacherController) Fetch(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func (c *TeacherController) FetchOne(w http.ResponseWriter, r *http.Request) {
+func (c *CourseController) FetchOne(w http.ResponseWriter, r *http.Request) {
 	registration := r.Context().Value("id").(string)
 
 	student, err := c.service.FetchOne(c.db, registration)

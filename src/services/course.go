@@ -22,10 +22,13 @@ func (s *CourseService) Create(db *driver.DB, course models.Course) (*models.Cou
 	return &course, err
 }
 
-func (s *CourseService) Fetch(db *driver.DB, params models.QueryParams, example models.Student) (*models.Page, error) {
-
+func (s *CourseService) Fetch(db *driver.DB, params models.QueryParams, example models.Course) (*models.Page, error) {
 	return s.repo.FetchWithPagination(db.Postgres, params, example)
+}
 
+func (s *CourseService) FetchOne(db *driver.DB, id string) (*models.Course, error) {
+	temp, err := s.repo.FetchOne(db.Postgres, id)
+	return temp.(*models.Course), err
 }
 
 func (s *CourseService) Count(db *driver.DB) (int, error) {

@@ -23,9 +23,7 @@ func (s *StudentService) Create(db *driver.DB, student models.Student) (*models.
 }
 
 func (s *StudentService) Fetch(db *driver.DB, params models.QueryParams, example models.Student) (*models.Page, error) {
-
 	return s.repo.FetchWithPagination(db.Postgres, params, example)
-
 }
 
 func (s *StudentService) Count(db *driver.DB) (int, error) {

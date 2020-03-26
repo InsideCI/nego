@@ -37,9 +37,9 @@ func (r *GenericRepository) Count(db *gorm.DB) (int, error) {
 	return count, nil
 }
 
-func (r *GenericRepository) Fetch(db *gorm.DB, limit int) (interface{}, error) {
+func (r *GenericRepository) Fetch(db *gorm.DB) (interface{}, error) {
 	out := r.slice()
-	if err := db.Limit(limit).Find(out).Error; err != nil {
+	if err := db.Find(out).Error; err != nil {
 		return nil, err
 	}
 	return out, nil
@@ -66,10 +66,9 @@ func (r *GenericRepository) FetchWithPagination(db *gorm.DB, params models.Query
 		offset = params.Page * limit
 	}
 
-	tx := db.Debug().Where("")
+	tx := db.Where("")
 
 	if !model.IsZero(example) {
-
 		for _, field := range fields {
 			if value, _ := model.Get(example, field.Name); value != "" && value != 0 {
 				if reflect.TypeOf(value).Kind() != reflect.String {
