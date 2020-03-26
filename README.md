@@ -86,14 +86,36 @@ Feel free to use and contribute.
 |----|----| 
 |Sorting|`students?sort=nome`, `students?sort=idCurso`|
 |Filtering|`students?nome=cleanderson`, `students?idCurso=1626865`|
-|Pagination|`students?page=0`|
+|Pagination|`students?page=3`|
 
-And of course, you can use them all at the same time:
+And of course, you can use all of them at the same time:
 
-`students?sort=nome&sort=id&nome=maria&page=10`
+`/teachers?nome=mardson&sort=nome&page=0`
 
-#### OBSERVATIONS: 
-- Any field of the models described above can be used as a filter as long as it is written in lower camel case: `idCurso`.
+It would give us:
+
+```json
+{
+  "totalElements": 1,
+  "totalPages": 1,
+  "limit": 10,
+  "page": 0,
+  "payloadSize": 1,
+  "payload": [
+    {
+      "id": 1122252,
+      "nome": "MARDSON FREITAS DE AMORIM",
+      "grau": "DOUTOR",
+      "idDepartamento": 1858
+    }
+  ]
+}
+```
+
+#### OBSERVATIONS:
+- The `page` parameter starts by index zero, until {`totalPages` - 1};
+- `totalElements` will change dinamically based on your filtering, if you have one, and not by the resource amount or the payload.
+- Any field of the models described above can be used as a filter as long as it is written in lower camel case: `idCurso`;
 - If more than one value to the parameter was provived, only the last will be considered, except the `sort` parameter.
 
 ...and more to come.
