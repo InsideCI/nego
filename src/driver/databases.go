@@ -39,6 +39,7 @@ func CreateDatabasesConnections() (*DB, error) {
 		&models.Center{},
 		&models.Department{},
 		&models.Teacher{},
+		&models.Class{},
 		&models.Course{},
 		&models.Student{},
 		&models.GeneralStatistic{})

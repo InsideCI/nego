@@ -6,8 +6,8 @@ import "github.com/go-playground/validator/v10"
 type Course struct {
 	ID          int    `validate:"required" json:"id" gorm:"PRIMARY_KEY;index:index_course_id"`
 	Nome        string `validate:"required" json:"nome"`
-	Local       string `validate:"required" json:"local"`
-	Tipo        string `validate:"required" json:"tipo"`
+	Local       string `json:"local"`
+	Tipo        string `json:"tipo"`
 	Coordenador string `validate:"required" json:"coordenador"`
 	IDCentro    int    `validate:"required" json:"idCentro" gorm:"index:index_course_center"`
 }

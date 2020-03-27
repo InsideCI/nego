@@ -10,22 +10,22 @@ import (
 	"net/http"
 )
 
-type TeacherController struct {
+type ClassController struct {
 	db      *driver.DB
-	service *services.TeacherService
+	service *services.ClassService
 }
 
-func NewTeacherController(db *driver.DB) *TeacherController {
-	return &TeacherController{
+func NewClassController(db *driver.DB) *ClassController {
+	return &ClassController{
 		db:      db,
-		service: services.NewTeacherService(),
+		service: services.NewClassService(),
 	}
 }
 
-func (c *TeacherController) Create(w http.ResponseWriter, r *http.Request) {
-	teacher := r.Context().Value("payload").(*models.Teacher)
+func (c *ClassController) Create(w http.ResponseWriter, r *http.Request) {
+	class := r.Context().Value("payload").(*models.Class)
 
-	created, err := c.service.Create(c.db, *teacher)
+	created, err := c.service.Create(c.db, *class)
 	if err != nil {
 		utils.Throw(w, exceptions.BadRequest, err)
 		return
@@ -34,9 +34,9 @@ func (c *TeacherController) Create(w http.ResponseWriter, r *http.Request) {
 	_ = json.NewEncoder(w).Encode(created)
 }
 
-func (c *TeacherController) Fetch(w http.ResponseWriter, r *http.Request) {
+func (c *ClassController) Fetch(w http.ResponseWriter, r *http.Request) {
 	params := r.Context().Value("params").(models.QueryParams)
-	example := r.Context().Value("example").(*models.Teacher)
+	example := r.Context().Value("example").(*models.Class)
 
 	page, err := c.service.Fetch(c.db, params, *example)
 	if err != nil {
@@ -47,15 +47,15 @@ func (c *TeacherController) Fetch(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func (c *TeacherController) FetchOne(w http.ResponseWriter, r *http.Request) {
+func (c *ClassController) FetchOne(w http.ResponseWriter, r *http.Request) {
 	registration := r.Context().Value("id").(string)
 
-	teacher, err := c.service.FetchOne(c.db, registration)
+	student, err := c.service.FetchOne(c.db, registration)
 	if err != nil {
 		utils.Throw(w, exceptions.InvalidAttributes, err)
 		return
 	}
 
-	_ = json.NewEncoder(w).Encode(teacher)
+	_ = json.NewEncoder(w).Encode(student)
 
 }

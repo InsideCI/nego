@@ -10,22 +10,22 @@ import (
 	"net/http"
 )
 
-type TeacherController struct {
+type DepartmentController struct {
 	db      *driver.DB
-	service *services.TeacherService
+	service *services.DepartmentService
 }
 
-func NewTeacherController(db *driver.DB) *TeacherController {
-	return &TeacherController{
+func NewDepartmentController(db *driver.DB) *DepartmentController {
+	return &DepartmentController{
 		db:      db,
-		service: services.NewTeacherService(),
+		service: services.NewDepartmentService(),
 	}
 }
 
-func (c *TeacherController) Create(w http.ResponseWriter, r *http.Request) {
-	teacher := r.Context().Value("payload").(*models.Teacher)
+func (c *DepartmentController) Create(w http.ResponseWriter, r *http.Request) {
+	department := r.Context().Value("payload").(*models.Department)
 
-	created, err := c.service.Create(c.db, *teacher)
+	created, err := c.service.Create(c.db, *department)
 	if err != nil {
 		utils.Throw(w, exceptions.BadRequest, err)
 		return
@@ -34,9 +34,9 @@ func (c *TeacherController) Create(w http.ResponseWriter, r *http.Request) {
 	_ = json.NewEncoder(w).Encode(created)
 }
 
-func (c *TeacherController) Fetch(w http.ResponseWriter, r *http.Request) {
+func (c *DepartmentController) Fetch(w http.ResponseWriter, r *http.Request) {
 	params := r.Context().Value("params").(models.QueryParams)
-	example := r.Context().Value("example").(*models.Teacher)
+	example := r.Context().Value("example").(*models.Department)
 
 	page, err := c.service.Fetch(c.db, params, *example)
 	if err != nil {
@@ -47,15 +47,15 @@ func (c *TeacherController) Fetch(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func (c *TeacherController) FetchOne(w http.ResponseWriter, r *http.Request) {
+func (c *DepartmentController) FetchOne(w http.ResponseWriter, r *http.Request) {
 	registration := r.Context().Value("id").(string)
 
-	teacher, err := c.service.FetchOne(c.db, registration)
+	department, err := c.service.FetchOne(c.db, registration)
 	if err != nil {
 		utils.Throw(w, exceptions.InvalidAttributes, err)
 		return
 	}
 
-	_ = json.NewEncoder(w).Encode(teacher)
+	_ = json.NewEncoder(w).Encode(department)
 
 }

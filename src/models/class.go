@@ -3,15 +3,15 @@ package models
 import "github.com/go-playground/validator/v10"
 
 type Class struct {
-	ID        int    `validate:"required" json:"id" ID   gorm:"PRIMARY_KEY;index:index_center_id"`
-	Nome      string `validate:"required" json:"nome"`
+	ID        string `validate:"required" json:"id" gorm:"PRIMARY_KEY;index:index_class_id"`
+	Nome      string `validate:"required" json:"nome" gorm:"index:index_class_name"`
 	Turma     string `validate:"required" json:"turma"`
-	Professor string `validate:"required" json:"professor"`
-	Horario   string `validate:"required" json:"horario"`
-	IDCurso   int    `validate:"required" json:"idCurso" gorm:"PRIMARY_KEY,index:index_class_course"`
+	Professor string `json:"professor"`
+	Horario   string `json:"horario"`
+	IDCurso   int    `validate:"required" json:"idCurso" gorm:"index:index_class_course"`
 }
 
-func NewClass(id, idCurso int, nome, turma, professor, horario string) *Class {
+func NewClass(idCurso int, id, nome, turma, professor, horario string) *Class {
 	return &Class{
 		ID:        id,
 		Nome:      nome,

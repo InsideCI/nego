@@ -7,8 +7,11 @@ import (
 
 func InitRoutes(db *driver.DB, router *chi.Mux) {
 
+	router.Route("/classes", NewClassRouter(db))
+	router.Route("/courses", NewCourseRouter(db))
+	router.Route("/departments", NewDepartmentRouter(db))
 	router.Route("/students", NewStudentRouter(db))
 	router.Route("/teachers", NewTeacherRouter(db))
-	router.Route("/courses", NewCourseRouter(db))
+	router.Route("/centers", NewCenterRouter(db))
 
 }

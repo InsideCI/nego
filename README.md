@@ -166,7 +166,7 @@ It would give us:
     CREATE TABLE PROFESSORES (
             id INT NOT NULL PRIMARY KEY,
             nome VARCHAR(100) NOT NULL,
-            grau VARCHAR(20) NOT NULL,
+            grau VARCHAR(20),
             id_departamento INT NOT NULL,
             FOREIGN KEY (id_departamento) REFERENCES departamentos(id)
     );
