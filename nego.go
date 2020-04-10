@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"github.com/InsideCI/nego/src/driver"
 	"github.com/InsideCI/nego/src/router"
 	"github.com/InsideCI/nego/src/router/middlewares"
@@ -14,13 +15,18 @@ import (
 
 func main() {
 
+	port := flag.String("port", "8080", "API port.")
+	debug := flag.Bool("debug", false, "SQL debug switch.")
+	flag.Parse()
+
 	if err := godotenv.Load("app.env"); err != nil {
 		panic("You must provide a .env config file. Instructions at README.")
 	}
+
 	// DATABASE
-	db, err := driver.CreateDatabasesConnections()
+	db, err := driver.CreateDatabasesConnections(*debug)
 	if err != nil {
-		panic(err)
+		panic("Could'nt create database connection: " + err.Error())
 	}
 
 	// CONTROLLER
@@ -30,7 +36,13 @@ func main() {
 	r.Use(middlewares.Cors.Handler)
 	router.InitRoutes(db, r)
 
-	port := os.Getenv("api_port")
-	log.Printf("NEGO API started on port %s.\n", port)
-	log.Fatal(http.ListenAndServe(":"+port, r))
+	certificate := os.Getenv("certificate")
+	key := os.Getenv("key")
+
+	log.Printf("Starting NEGO at port %s.\n", *port)
+	if certificate != "" && key != "" {
+		log.Fatal(http.ListenAndServeTLS(":"+*port, certificate, key, r))
+	} else {
+		log.Fatal(http.ListenAndServe(":"+*port, r))
+	}
 }

@@ -13,7 +13,6 @@ nego
 *.out
 
 # Sensitive data
-*.env
 
 # IDE and binaries
 .vscode

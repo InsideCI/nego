@@ -1,7 +1,6 @@
 package driver
 
 import (
-	"flag"
 	"fmt"
 	"log"
 	"os"
@@ -19,10 +18,7 @@ type DB struct {
 
 // CreateDatabasesConnections returns an instance of predefined
 // databases connections.
-func CreateDatabasesConnections() (*DB, error) {
-
-	debugFlag := flag.Bool("debug", false, "SQL debug switch.")
-	flag.Parse()
+func CreateDatabasesConnections(debug bool) (*DB, error) {
 
 	// Any .env file with following parameters will be compatible;
 	user := os.Getenv("db_user")
@@ -37,7 +33,7 @@ func CreateDatabasesConnections() (*DB, error) {
 	if err != nil {
 		return nil, err
 	}
-	dbPostgres.LogMode(*debugFlag)
+	dbPostgres.LogMode(debug)
 
 	log.Println("Connected to Postgres database. Starting migration...")
 

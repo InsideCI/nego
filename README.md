@@ -178,18 +178,9 @@ Before everything:
 
 * You need at least an empty PostgreSQL database created with the basic model logic above.
 * There's also a custom scrapper created just for this project, called [SUS](github.com/InsideCI/sus), so you can populate your database with real data.
-
-Your must create a `app.env` file on root folder and fill those parameters:
-
-```.env
-db_name=yourDatabaseName
-db_pass=yourDatabasePassword
-db_user=yourDatabaseLogin
-db_host=yourDatabaseIpaddress
-db_port=yourDatabasePort
-
-api_port=yourApiPort
-```
+* Your **must** fill the `app.env` file on root folder with:
+    * Your database credentials;
+    * and SSL certificate keys paths if you have any.
 
 And then, you can run this project by:
 
@@ -197,6 +188,15 @@ And then, you can run this project by:
 
 `./nego`
 
-You now can make requests with any REST client as [Insomnia](https://github.com/getinsomnia) or web any application at the address:
+Available runtime flags:
 
-`http://localhost:yourApiPort`
+|Flag | Description | Type | Default | Usage |
+|---- | ---- | ---- | ---- | ---- |
+|`debug` | Switch SQL debug mode | boolean | false | `./nego -debug true` |
+|`port` | API port |string | 8080 | `./nego -port 8080` |
+
+And of course you make requests with any REST client, like [Insomnia](https://github.com/getinsomnia) or web any application at the address:
+
+`http://localhost:port` if no SSL key provided, or:
+
+`https://localhost:port` if you have a certificate.
