@@ -1,6 +1,7 @@
 package driver
 
 import (
+	"flag"
 	"fmt"
 	"log"
 	"os"
@@ -20,6 +21,9 @@ type DB struct {
 // databases connections.
 func CreateDatabasesConnections() (*DB, error) {
 
+	debugFlag := flag.Bool("debug", false, "SQL debug switch.")
+	flag.Parse()
+
 	// Any .env file with following parameters will be compatible;
 	user := os.Getenv("db_user")
 	pass := os.Getenv("db_pass")
@@ -27,15 +31,17 @@ func CreateDatabasesConnections() (*DB, error) {
 	host := os.Getenv("db_host")
 	port := os.Getenv("db_port")
 
-	dbURI := fmt.Sprintf("host=%s port=%s dbname=%s user=%s password=%s  sslmode=disable", host, port, name, user, pass)
-	db, err := gorm.Open("postgres", dbURI)
+	//PostgreSQL database
+	URIPostgres := fmt.Sprintf("host=%s port=%s dbname=%s user=%s password=%s  sslmode=disable", host, port, name, user, pass)
+	dbPostgres, err := gorm.Open("postgres", URIPostgres)
 	if err != nil {
 		return nil, err
 	}
+	dbPostgres.LogMode(*debugFlag)
 
 	log.Println("Connected to Postgres database. Starting migration...")
 
-	validateAndMigrate(db,
+	validateAndMigrate(dbPostgres,
 		&models.Center{},
 		&models.Department{},
 		&models.Teacher{},
@@ -47,7 +53,7 @@ func CreateDatabasesConnections() (*DB, error) {
 	log.Println("Migration ended with no errors.")
 
 	return &DB{
-		Postgres: db,
+		Postgres: dbPostgres,
 	}, nil
 }
 
