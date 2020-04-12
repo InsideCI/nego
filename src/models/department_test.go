@@ -1,12 +1,9 @@
-package models_test
+package models
 
-import (
-	"github.com/InsideCI/nego/src/models"
-	"testing"
-)
+import "testing"
 
 func TestNewDepartment(t *testing.T) {
-	got := models.NewDepartment(1010, "Department", 1010)
+	got := NewDepartment(1010, "Department", 1010)
 	if err := got.Valid(); err != nil {
 		t.Error(err)
 	}

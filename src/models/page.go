@@ -1,5 +1,8 @@
 package models
 
+import "github.com/go-playground/validator/v10"
+
+//Page describes a basic page model for fetching.
 type Page struct {
 	Total       int         `json:"totalElements"`
 	TotalPages  int         `json:"totalPages"`
@@ -9,6 +12,7 @@ type Page struct {
 	Payload     interface{} `json:"payload"`
 }
 
+//NewPage returns a new instance of page.
 func NewPage(total, limit, page, totalPages, payloadSize int, payload interface{}) *Page {
 	return &Page{
 		Total:       total,
@@ -18,4 +22,10 @@ func NewPage(total, limit, page, totalPages, payloadSize int, payload interface{
 		PayloadSize: payloadSize,
 		Payload:     payload,
 	}
+}
+
+//Valid checks for fields errors.
+func (s *Page) Valid() error {
+	v := validator.New()
+	return v.Struct(s)
 }

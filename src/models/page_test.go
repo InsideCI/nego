@@ -2,8 +2,8 @@ package models
 
 import "testing"
 
-func TestNewCenter(t *testing.T) {
-	got := NewCenter(1010, "Center")
+func TestNewPage(t *testing.T) {
+	got := NewPage(1, 1, 1, 1, 1, " ")
 	if err := got.Valid(); err != nil {
 		t.Error(err)
 	}

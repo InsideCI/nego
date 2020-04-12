@@ -2,15 +2,16 @@ package main
 
 import (
 	"flag"
+	"log"
+	"net/http"
+	"os"
+
 	"github.com/InsideCI/nego/src/driver"
 	"github.com/InsideCI/nego/src/router"
 	"github.com/InsideCI/nego/src/router/middlewares"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/joho/godotenv"
-	"log"
-	"net/http"
-	"os"
 )
 
 func main() {
