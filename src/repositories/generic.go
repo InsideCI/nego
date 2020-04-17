@@ -1,15 +1,18 @@
 package repositories
 
 import (
+	"errors"
 	"fmt"
+	"reflect"
+
 	"github.com/InsideCI/nego/src/models"
 	"github.com/InsideCI/nego/src/utils/constants"
 	"github.com/iancoleman/strcase"
 	"github.com/jinzhu/gorm"
 	"gopkg.in/jeevatkm/go-model.v1"
-	"reflect"
 )
 
+//GenericRepository abstracts all basic crud methods.
 type GenericRepository struct {
 	Type interface{}
 }
@@ -24,10 +27,12 @@ func (r *GenericRepository) slice() interface{} {
 	return out
 }
 
+//Create inserts a new instance of model Type on the database.
 func (r *GenericRepository) Create(db *gorm.DB, model interface{}) error {
 	return db.Create(model).Error
 }
 
+//Count returns the total ammount of registers of model Type.
 func (r *GenericRepository) Count(db *gorm.DB) (int, error) {
 	var count int
 	out := r.output()
@@ -37,6 +42,7 @@ func (r *GenericRepository) Count(db *gorm.DB) (int, error) {
 	return count, nil
 }
 
+//Fetch returns all registered models Type from database.
 func (r *GenericRepository) Fetch(db *gorm.DB) (interface{}, error) {
 	out := r.slice()
 	if err := db.Find(out).Error; err != nil {
@@ -45,6 +51,7 @@ func (r *GenericRepository) Fetch(db *gorm.DB) (interface{}, error) {
 	return out, nil
 }
 
+//FetchWithPagination returns a page of Type based on query parameters.
 func (r *GenericRepository) FetchWithPagination(db *gorm.DB, params models.QueryParams, example interface{}) (*models.Page, error) {
 	var (
 		out         = r.slice()
@@ -54,8 +61,8 @@ func (r *GenericRepository) FetchWithPagination(db *gorm.DB, params models.Query
 		fields, _   = model.Fields(example)
 	)
 
-	if params.Limit <= 0 || params.Limit > constants.MAXIMUM_FETCH {
-		limit = constants.MAXIMUM_FETCH
+	if params.Limit <= 0 || params.Limit > constants.MaximumFetch {
+		limit = constants.MaximumFetch
 	} else {
 		limit = params.Limit
 	}
@@ -68,6 +75,7 @@ func (r *GenericRepository) FetchWithPagination(db *gorm.DB, params models.Query
 
 	tx := db.Where("")
 
+	// Parse filter parameters.
 	if !model.IsZero(example) {
 		for _, field := range fields {
 			if value, _ := model.Get(example, field.Name); value != "" && value != 0 {
@@ -75,6 +83,7 @@ func (r *GenericRepository) FetchWithPagination(db *gorm.DB, params models.Query
 					tx = tx.Where(strcase.ToSnake(field.Tag.Get("json"))+" = ?", value)
 				} else {
 					valueStr := fmt.Sprintf("%v", value)
+					// Case insensitive and unrelative filter position on register field.
 					tx = tx.Where(strcase.ToSnake(field.Tag.Get("json"))+" ILIKE ?", "%"+valueStr+"%")
 				}
 			}
@@ -87,6 +96,7 @@ func (r *GenericRepository) FetchWithPagination(db *gorm.DB, params models.Query
 		counted <- true
 	}()
 
+	// Parse sort parameters.
 	if len(params.Order) != 0 {
 		for _, field := range params.Order {
 			for _, exampleField := range fields {
@@ -105,17 +115,23 @@ func (r *GenericRepository) FetchWithPagination(db *gorm.DB, params models.Query
 	return models.NewPage(payloadSize, limit, params.Page, totalPages, reflect.ValueOf(out).Elem().Len(), out), nil
 }
 
+//FetchOne returns a instance of a model Type by it's ID.
 func (r *GenericRepository) FetchOne(db *gorm.DB, id string) (interface{}, error) {
 	out := r.output()
 	err := db.Where("id = ?", id).First(out).Error
 	if err != nil {
 		return nil, err
 	}
+	if model.IsZero(out) {
+		return nil, errors.New("register not found")
+	}
 	return out, nil
 }
 
-func (r *GenericRepository) Exists(db *gorm.DB, model interface{}) bool {
+//Exists checks if a register exits by it's ID.
+func (r *GenericRepository) Exists(db *gorm.DB, id string) bool {
+	out := r.output()
 	var count int
-	db.Model(model).Count(&count)
+	db.Model(out).Where("id = ?", id).Count(&count)
 	return count != 0
 }

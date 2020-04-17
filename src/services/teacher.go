@@ -27,5 +27,8 @@ func (s *TeacherService) Fetch(db *driver.DB, params models.QueryParams, example
 
 func (s *TeacherService) FetchOne(db *driver.DB, id string) (*models.Teacher, error) {
 	temp, err := s.repo.FetchOne(db.Postgres, id)
+	if err != nil {
+		return nil, err
+	}
 	return temp.(*models.Teacher), err
 }

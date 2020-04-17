@@ -2,12 +2,13 @@ package rest
 
 import (
 	"encoding/json"
+	"net/http"
+
 	"github.com/InsideCI/nego/src/driver"
 	"github.com/InsideCI/nego/src/models"
 	"github.com/InsideCI/nego/src/services"
 	"github.com/InsideCI/nego/src/utils"
 	"github.com/InsideCI/nego/src/utils/exceptions"
-	"net/http"
 )
 
 type TeacherController struct {
@@ -52,7 +53,7 @@ func (c *TeacherController) FetchOne(w http.ResponseWriter, r *http.Request) {
 
 	teacher, err := c.service.FetchOne(c.db, registration)
 	if err != nil {
-		utils.Throw(w, exceptions.InvalidAttributes, err)
+		utils.Throw(w, exceptions.NotFound, err)
 		return
 	}
 

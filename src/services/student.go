@@ -38,6 +38,6 @@ func (s *StudentService) FetchOne(db *driver.DB, id string) (*models.Student, er
 	return tmp.(*models.Student), err
 }
 
-func (s *StudentService) Exists(db *driver.DB, student *models.Student) bool {
-	return s.repo.Exists(db.Postgres, student)
+func (s *StudentService) Exists(db *driver.DB, id int) bool {
+	return s.repo.Exists(db.Postgres, string(id))
 }

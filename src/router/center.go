@@ -8,6 +8,7 @@ import (
 	"github.com/go-chi/chi"
 )
 
+//NewCenterRouter returns a new instance of router for Center.
 func NewCenterRouter(db *driver.DB) func(r chi.Router) {
 	generic := middlewares.GenericMiddleware{Type: models.Center{}}
 	handlers := rest.NewCenterController(db)

@@ -1,11 +1,22 @@
 package constants
 
+import "os"
+
 var (
+
+	// SETUP
+	DefaultPort      = "8080"
+	DefaultFlagDebug = false
+
 	// VERSIONING
-	API                 = "api/"
-	CURRENT_API_VERSION = "v1/"
+	API               = "api/"
+	CurrentAPIVersion = "v1/"
 
 	// CONTROLLERS
-	MAXIMUM_FETCH    = 10
-	LIMIT_FAST_FETCH = 5
+	MaximumFetch   = 10
+	LimitFastFetch = 5
+
+	// AUTH
+	RegistrationKey = os.Getenv("REG_KEY")
+	JwtTokenKey     = os.Getenv("JWT_TKN")
 )

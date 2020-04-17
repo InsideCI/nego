@@ -44,7 +44,8 @@ func CreateDatabasesConnections(debug bool) (*DB, error) {
 		&models.Class{},
 		&models.Course{},
 		&models.Student{},
-		&models.GeneralStatistic{})
+		&models.GeneralStatistic{},
+		&models.User{})
 
 	log.Println("Migration ended with no errors.")
 

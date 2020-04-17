@@ -2,15 +2,16 @@ package rest
 
 import (
 	"encoding/json"
+	"net/http"
+
 	"github.com/InsideCI/nego/src/driver"
 	"github.com/InsideCI/nego/src/models"
 	"github.com/InsideCI/nego/src/services"
 	"github.com/InsideCI/nego/src/utils"
 	"github.com/InsideCI/nego/src/utils/exceptions"
-	"net/http"
 )
 
-// StudentController is a controller that wraps a StudentRepository.
+// StudentController is a controller that wraps a StudentService.
 type StudentController struct {
 	db      *driver.DB
 	service *services.StudentService

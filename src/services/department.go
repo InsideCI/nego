@@ -27,5 +27,8 @@ func (s *DepartmentService) Fetch(db *driver.DB, params models.QueryParams, exam
 
 func (s *DepartmentService) FetchOne(db *driver.DB, id string) (*models.Department, error) {
 	temp, err := s.repo.FetchOne(db.Postgres, id)
+	if err != nil {
+		return nil, err
+	}
 	return temp.(*models.Department), err
 }

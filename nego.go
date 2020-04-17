@@ -9,6 +9,7 @@ import (
 	"github.com/InsideCI/nego/src/driver"
 	"github.com/InsideCI/nego/src/router"
 	"github.com/InsideCI/nego/src/router/middlewares"
+	"github.com/InsideCI/nego/src/utils/constants"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/joho/godotenv"
@@ -16,18 +17,19 @@ import (
 
 func main() {
 
-	port := flag.String("port", "8080", "API port.")
-	debug := flag.Bool("debug", false, "SQL debug switch.")
+	port := flag.String("port", constants.DefaultPort, "API port.")
+	debug := flag.Bool("debug", constants.DefaultFlagDebug, "SQL debug switch.")
 	flag.Parse()
 
 	if err := godotenv.Load("app.env"); err != nil {
 		panic("You must provide a .env config file. Instructions at README.")
 	}
+	//TODO: check is JWT key was set.
 
 	// DATABASE
 	db, err := driver.CreateDatabasesConnections(*debug)
 	if err != nil {
-		panic("Could'nt create database connection: " + err.Error())
+		panic("Could not create database connection: " + err.Error())
 	}
 
 	// CONTROLLER

@@ -27,5 +27,8 @@ func (s *CenterService) Fetch(db *driver.DB, params models.QueryParams, example 
 
 func (s *CenterService) FetchOne(db *driver.DB, id string) (*models.Center, error) {
 	temp, err := s.repo.FetchOne(db.Postgres, id)
+	if err != nil {
+		return nil, err
+	}
 	return temp.(*models.Center), err
 }
