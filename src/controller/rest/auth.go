@@ -3,15 +3,12 @@ package rest
 import (
 	"io"
 	"net/http"
-	"time"
 
 	"github.com/InsideCI/nego/src/driver"
 	"github.com/InsideCI/nego/src/models"
 	"github.com/InsideCI/nego/src/services"
 	"github.com/InsideCI/nego/src/utils"
-	"github.com/InsideCI/nego/src/utils/constants"
 	"github.com/InsideCI/nego/src/utils/exceptions"
-	"github.com/dgrijalva/jwt-go"
 )
 
 // AuthController is a controller that wraps a UserService.
@@ -46,17 +43,8 @@ func (c *AuthController) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"email": user.Email,
-		"exp":   time.Now().Add(time.Hour * time.Duration(1)).Unix(),
-		"iat":   time.Now().Unix(),
-	})
-
-	tokenString, errToken := token.SignedString([]byte(constants.JwtTokenKey))
-	if errToken != nil {
-		utils.Throw(w, exceptions.InternalError, nil)
-		return
-	}
+	login := utils.NewJWT()
+	tokenString := login.Encode(user.Email)
 
 	io.WriteString(w, `{"token":"`+tokenString+`"}`)
 }

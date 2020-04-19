@@ -14,7 +14,7 @@ func NewClassRouter(db *driver.DB) func(r chi.Router) {
 
 	return func(r chi.Router) {
 		// classes
-		r.With(generic.Persist).Post("/", handlers.Create)
+		r.With(auth.Authenticator()).With(generic.Persist).Post("/", handlers.Create)
 		r.With(generic.Fetch).Get("/", handlers.Fetch)
 
 		// classes/{id}

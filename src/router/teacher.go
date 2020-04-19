@@ -14,7 +14,7 @@ func NewTeacherRouter(db *driver.DB) func(r chi.Router) {
 
 	return func(r chi.Router) {
 		// teachers
-		r.With(generic.Persist).Post("/", handlers.Create)
+		r.With(auth.Authenticator()).With(generic.Persist).Post("/", handlers.Create)
 		r.With(generic.Fetch).Get("/", handlers.Fetch)
 
 		// teachers/{id}
