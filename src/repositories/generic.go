@@ -7,6 +7,7 @@ import (
 
 	"github.com/InsideCI/nego/src/models"
 	"github.com/InsideCI/nego/src/utils/constants"
+	"github.com/dgraph-io/badger/v2"
 	"github.com/iancoleman/strcase"
 	"github.com/jinzhu/gorm"
 	"gopkg.in/jeevatkm/go-model.v1"
@@ -14,7 +15,21 @@ import (
 
 //GenericRepository abstracts all basic crud methods.
 type GenericRepository struct {
-	Type interface{}
+	Type  interface{}
+	cache *badger.DB
+}
+
+//NewGenericRepository returns a new instance of a generic repository with caching.
+func NewGenericRepository(t interface{}) *GenericRepository {
+	db, err := badger.Open(badger.DefaultOptions("").WithInMemory(true))
+
+	if err != nil {
+		panic("couldn't initiate cache server" + err.Error())
+	}
+	return &GenericRepository{
+		Type:  t,
+		cache: db,
+	}
 }
 
 func (r *GenericRepository) output() interface{} {
