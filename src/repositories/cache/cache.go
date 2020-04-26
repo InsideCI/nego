@@ -2,7 +2,6 @@ package cache
 
 import (
 	"encoding/json"
-	"reflect"
 	"time"
 
 	"github.com/InsideCI/nego/src/models"
@@ -10,16 +9,10 @@ import (
 )
 
 type BadgerRepository struct {
-	Type  interface{}
 	cache *badger.DB
 }
 
-func (r *BadgerRepository) output() interface{} {
-	out := reflect.New(reflect.TypeOf(r.Type)).Interface()
-	return out
-}
-
-func NewBadgerRepository(t interface{}) *BadgerRepository {
+func NewBadgerRepository() *BadgerRepository {
 
 	db, err := badger.Open(badger.DefaultOptions("").WithInMemory(true))
 
@@ -28,7 +21,6 @@ func NewBadgerRepository(t interface{}) *BadgerRepository {
 	}
 
 	return &BadgerRepository{
-		Type:  t,
 		cache: db,
 	}
 }

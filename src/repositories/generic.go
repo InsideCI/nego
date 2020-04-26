@@ -24,7 +24,7 @@ type GenericRepository struct {
 func NewGenericRepository(t interface{}) *GenericRepository {
 	return &GenericRepository{
 		Type:    t,
-		caching: cache.NewBadgerRepository(t),
+		caching: cache.NewBadgerRepository(),
 	}
 }
 
