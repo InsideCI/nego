@@ -7,13 +7,13 @@ import (
 
 //UserRepository represents a repository for User model.
 type UserRepository struct {
-	GenericRepository
+	*GenericRepository
 }
 
 //NewUserRepository returns a new instance of user repository.
 func NewUserRepository() *UserRepository {
 	return &UserRepository{
-		struct{ Type interface{} }{Type: models.User{}},
+		GenericRepository: NewGenericRepository(models.User{}),
 	}
 }
 

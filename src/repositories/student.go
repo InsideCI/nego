@@ -6,12 +6,12 @@ import (
 
 //StudentRepository abstracts a basic Student repository.
 type StudentRepository struct {
-	GenericRepository
+	*GenericRepository
 }
 
 // NewStudentRepository creates a PostgreSQL CRUD interface implementation
 func NewStudentRepository() *StudentRepository {
 	return &StudentRepository{
-		struct{ Type interface{} }{Type: models.Student{}},
+		GenericRepository: NewGenericRepository(models.Student{}),
 	}
 }

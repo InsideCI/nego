@@ -5,11 +5,11 @@ import (
 )
 
 type CenterRepository struct {
-	GenericRepository
+	*GenericRepository
 }
 
 func NewCenterRepository() *CenterRepository {
 	return &CenterRepository{
-		struct{ Type interface{} }{Type: models.Center{}},
+		GenericRepository: NewGenericRepository(models.Center{}),
 	}
 }
