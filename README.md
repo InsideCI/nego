@@ -82,11 +82,11 @@ Feel free to use and contribute.
 
 ### FETCHING FEATURES:
 
-|Type|Example| 
-|----|----| 
-|Sorting|`students?sort=nome`, `students?sort=idCurso`|
-|Filtering|`students?nome=cleanderson`, `students?idCurso=1626865`|
-|Pagination|`students?page=3`|
+| Type       | Example                                                 |
+| ---------- | ------------------------------------------------------- |
+| Sorting    | `students?sort=nome`, `students?sort=idCurso`           |
+| Filtering  | `students?nome=cleanderson`, `students?idCurso=1626865` |
+| Pagination | `students?page=3`                                       |
 
 And of course, you can use all of them at the same time:
 
@@ -190,13 +190,19 @@ And then, you can run this project by:
 
 Available runtime flags:
 
-|Flag | Description | Type | Default | Usage |
-|---- | ---- | ---- | ---- | ---- |
-|`debug` | Switch SQL debug mode | boolean | false | `./nego -debug true` |
-|`port` | API port |string | 8080 | `./nego -port 8080` |
+| Flag    | Description           | Type    | Default | Usage                |
+| ------- | --------------------- | ------- | ------- | -------------------- |
+| `debug` | Switch SQL debug mode | boolean | false   | `./nego -debug true` |
+| `port`  | API port              | string  | 8080    | `./nego -port 8080`  |
 
 And of course you make requests with any REST client, like [Insomnia](https://github.com/getinsomnia) or any web application at the address:
 
 `http://localhost:port` if no SSL key provided, or:
 
 `https://localhost:port` if you have a certificate.
+
+
+## TODOS:
+- Create an unified request model (query + model) - DTO
+- Setup a generic middleware for DTO 
+- Setup caching for GET page requests

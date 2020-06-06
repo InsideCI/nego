@@ -3,6 +3,7 @@ module github.com/InsideCI/nego
 go 1.14
 
 require (
+	github.com/dgraph-io/badger/v2 v2.0.3
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/go-chi/chi v4.1.0+incompatible
 	github.com/go-chi/cors v1.1.1
