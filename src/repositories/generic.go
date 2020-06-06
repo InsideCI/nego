@@ -1,11 +1,13 @@
 package repositories
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"reflect"
 
 	"github.com/InsideCI/nego/src/models"
+	"github.com/InsideCI/nego/src/repositories/cache"
 	"github.com/InsideCI/nego/src/utils/constants"
 	"github.com/iancoleman/strcase"
 	"github.com/jinzhu/gorm"
@@ -14,7 +16,16 @@ import (
 
 //GenericRepository abstracts all basic crud methods.
 type GenericRepository struct {
-	Type interface{}
+	Type    interface{}
+	caching *cache.BadgerRepository
+}
+
+//NewGenericRepository returns a new instance of a generic repository with caching.
+func NewGenericRepository(t interface{}) *GenericRepository {
+	return &GenericRepository{
+		Type:    t,
+		caching: cache.NewBadgerRepository(),
+	}
 }
 
 func (r *GenericRepository) output() interface{} {
@@ -118,13 +129,29 @@ func (r *GenericRepository) FetchWithPagination(db *gorm.DB, params models.Query
 //FetchOne returns a instance of a model Type by it's ID.
 func (r *GenericRepository) FetchOne(db *gorm.DB, id string) (interface{}, error) {
 	out := r.output()
-	err := db.Where("id = ?", id).First(out).Error
+
+	cache, err := r.caching.Get(id)
+
+	if err == nil {
+		json.Unmarshal(cache, out)
+		return out, nil
+	}
+
+	fmt.Println(cache)
+
+	err = db.Where("id = ?", id).First(out).Error
 	if err != nil {
 		return nil, err
 	}
 	if model.IsZero(out) {
 		return nil, errors.New("register not found")
 	}
+
+	err = r.caching.SaveByIDKey(id, out)
+	if err != nil {
+		return nil, err
+	}
+
 	return out, nil
 }
 
