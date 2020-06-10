@@ -26,7 +26,7 @@ func main() {
 	if err := godotenv.Load("app.env"); err != nil {
 		panic("You must provide a .env config file. Instructions at README.")
 	}
-	//TODO: check is JWT key was set.
+	//TODO: check if JWT key was set.
 
 	// DATABASE
 	db, err := driver.CreateDatabasesConnections(*debug)
@@ -58,7 +58,7 @@ func main() {
 	if *prod {
 		log.Printf("Starting NEGO with a TLS connection at port %s.\n", *port)
 		go http.ListenAndServe(":80", certManager.HTTPHandler(nil))
-		server.ListenAndServeTLS("", "")
+		log.Fatal(server.ListenAndServeTLS("", ""))
 	}
 
 	log.Printf("Starting NEGO with non TLS connection at port %s.\n", *port)
