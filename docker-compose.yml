@@ -1,0 +1,38 @@
+version: "3"
+
+services:
+  db:
+    image: postgres
+    container_name: SIGAA_DATABASE
+    env_file:
+      - ./app.env
+    environment:
+      - POSTGRES_USER=${db_user}
+      - POSTGRES_PASSWORD=${db_pass}
+      - POSTGRES_DB=${db_name}
+      - DATABASE_HOST=${db_host}
+    ports:
+      - ${db_port}:${db_port}
+    volumes:
+      - db_postgres:/var/lib/postgres/data
+    networks:
+      - nego
+
+  nego:
+    build: .
+    container_name: NEGO_API
+    restart: on-failure
+    volumes:
+      - api:/usr/src/app
+    depends_on:
+      - db
+    networks:
+      - nego
+
+volumes:
+  api:
+  db_postgres:
+
+networks:
+  nego:
+    driver: bridge

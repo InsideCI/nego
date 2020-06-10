@@ -190,9 +190,9 @@ Before everything:
 
 * You need at least an empty PostgreSQL database created with the basic model logic above.
 * There's also a custom scrapper created just for this project, called [SUS](https://github.com/InsideCI/sus), so you can populate your database with real data.
-* Your **must** fill the `app.env` file on root folder with:
-    * Your database credentials;
-    * and SSL certificate keys paths if you have any.
+* You **must** fill the `app.env` file on root folder with:
+    * database credentials;
+    * keys for JWT and user registration.
 
 And then, you can run this project by:
 
@@ -202,20 +202,16 @@ And then, you can run this project by:
 
 Available runtime flags:
 
-| Flag    | Description           | Type    | Default | Usage                |
-| ------- | --------------------- | ------- | ------- | -------------------- |
-| `debug` | Switch SQL debug mode | boolean | false   | `./nego -debug true` |
-| `port`  | API port              | string  | 8080    | `./nego -port 8080`  |
+| Flag    | Description         | Type    | Default | Usage                |
+| ------- | ------------------- | ------- | ------- | -------------------- |
+| `debug` | SQL debug mode flag | boolean | false   | `./nego -debug true` |
+| `port`  | API port            | string  | 8080    | `./nego -port 8080`  |
+| `prod`  | TLS connection flag | boolean | false   | `./nego -prod`       |
 
-And of course you make requests with any REST client, like [Insomnia](https://github.com/getinsomnia) or any web application at the address:
-
-`http://localhost:port` if no SSL key provided, or:
-
-`https://localhost:port` if you have a certificate.
-
-
+And of course you make requests with any REST client, like [Insomnia](https://github.com/getinsomnia) or any web application at your `localhost:port/{resource}`.
 
 ## TODOS
 - Create an unified request model (query + model) - DTO
 - Setup a generic middleware for DTO 
 - Setup caching for GET page requests
+- Setup docker with PostgreSQL instance
