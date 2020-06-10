@@ -7,6 +7,7 @@ var (
 	// SETUP
 	DefaultPort      = "8080"
 	DefaultFlagDebug = false
+	DefaultFlagTLS   = false
 
 	// VERSIONING
 	API               = "api/"

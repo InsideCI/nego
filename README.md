@@ -9,17 +9,28 @@ NEGO is a UFPB SIGAA Restful API created with Golang for study purposes only, bu
 
 Feel free to use and contribute.
 
-### MAIN FEATURES:
+- [NEGO](#nego)
+  - [MAIN FEATURES](#main-features)
+  - [AVAILABLE RESOURCES](#available-resources)
+  - [FETCHING FEATURES](#fetching-features)
+    - [OBSERVATIONS](#observations)
+  - [MODELS RELATION LOGIC](#models-relation-logic)
+  - [USAGE DETAILS](#usage-details)
+  - [TODOS](#todos)
+
+## MAIN FEATURES
 
 - Readable and simple code;
 - Uses [GORM](github.com/jinzhu/gorm) as the default database management tool for a more dynamic and generic approach to databases;
 - Router specification created with [CHI](github.com/go-chi/chi) reliable router structure;
+- Caching;
 - Generic repository and middlewares;
 - Multi database support for each resource;
-- Multi ARCH: created for both REST and gRPC support in mind;
+- Created with both REST and gRPC support in mind;
+- Auth with JWT;
 - Complete fetching capabilities: pagination, sorting, filtering.
 
-### AVAILABLE RESOURCES:
+## AVAILABLE RESOURCES
 
 `/centers` or `/centers/1856`
 ```json
@@ -80,7 +91,7 @@ Feel free to use and contribute.
 }
 ```
 
-### FETCHING FEATURES:
+## FETCHING FEATURES
 
 | Type       | Example                                                 |
 | ---------- | ------------------------------------------------------- |
@@ -112,15 +123,16 @@ It would give us:
 }
 ```
 
-#### OBSERVATIONS:
+...and more to come.
+
+### OBSERVATIONS
 - The `page` parameter starts by index zero, until {`totalPages` - 1};
 - `totalElements` will change dinamically based on your filtering, if you have one, and not by the resource amount or the payload.
 - Any field of the models described above can be used as a filter as long as it is written in lower camel case: `idCurso`;
-- If more than one value to the parameter was provived, only the last will be considered, except the `sort` parameter.
+- If more than one value to any parameter was provided, only the last will be considered, except for the `sort` parameter.
 
-...and more to come.
 
-### MODELS RELATION LOGIC:
+## MODELS RELATION LOGIC
 
 ```sql
     CREATE TABLE CENTROS (
@@ -172,7 +184,7 @@ It would give us:
     );
 ```
 
-### USAGE DETAILS
+## USAGE DETAILS
 
 Before everything:
 
@@ -202,7 +214,8 @@ And of course you make requests with any REST client, like [Insomnia](https://gi
 `https://localhost:port` if you have a certificate.
 
 
-## TODOS:
+
+## TODOS
 - Create an unified request model (query + model) - DTO
 - Setup a generic middleware for DTO 
 - Setup caching for GET page requests

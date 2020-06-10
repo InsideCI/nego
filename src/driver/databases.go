@@ -28,15 +28,16 @@ func CreateDatabasesConnections(debug bool) (*DB, error) {
 	port := os.Getenv("db_port")
 
 	//PostgreSQL database
+	log.Println("Connecting to Postgres database...")
 	URIPostgres := fmt.Sprintf("host=%s port=%s dbname=%s user=%s password=%s  sslmode=disable", host, port, name, user, pass)
 	dbPostgres, err := gorm.Open("postgres", URIPostgres)
 	if err != nil {
 		return nil, err
 	}
 	dbPostgres.LogMode(debug)
+	log.Println("Connected to Postgres database.")
 
-	log.Println("Connected to Postgres database. Starting migration...")
-
+	log.Println("Starting migration...")
 	validateAndMigrate(dbPostgres,
 		&models.Center{},
 		&models.Department{},
@@ -46,7 +47,6 @@ func CreateDatabasesConnections(debug bool) (*DB, error) {
 		&models.Student{},
 		&models.GeneralStatistic{},
 		&models.User{})
-
 	log.Println("Migration ended with no errors.")
 
 	return &DB{
