@@ -2,37 +2,34 @@ version: "3"
 
 services:
   db:
-    image: postgres
+    image: postgres:latest
     container_name: SIGAA_DATABASE
-    env_file:
-      - ./app.env
+    env_file: .env
     environment:
       - POSTGRES_USER=${db_user}
       - POSTGRES_PASSWORD=${db_pass}
       - POSTGRES_DB=${db_name}
       - DATABASE_HOST=${db_host}
     ports:
-      - ${db_port}:${db_port}
+      - 5432:5432
     volumes:
-      - db_postgres:/var/lib/postgres/data
+      - .:/var/lib/postgres/data
     networks:
-      - nego
+      - sigaa
 
   nego:
     build: .
     container_name: NEGO_API
-    restart: on-failure
+    restart: unless-stopped
     volumes:
-      - api:/usr/src/app
+      - .:/usr/src/app
     depends_on:
       - db
+    ports:
+      - 8081:8081
+      - 80:80
     networks:
-      - nego
-
-volumes:
-  api:
-  db_postgres:
+      - sigaa
 
 networks:
-  nego:
-    driver: bridge
+  sigaa:

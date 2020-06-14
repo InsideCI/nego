@@ -1,5 +1,7 @@
 # first stage: golang base image as a builder
-FROM golang:latest-alpine AS builder
+FROM golang:alpine AS builder
+
+ENV CGO_ENABLED=0
 
 LABEL maintainer "Cleanderson Lins <cleandersonlins@gmail.com>"
 
@@ -12,19 +14,23 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 COPY . .
-RUN go build .
+RUN  CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o nego .
 
 FROM alpine:latest AS final
 
-RUN apk add --no-cache ca-certificates
+WORKDIR /root/
 
-COPY --from=builder /app /app
+COPY --from=builder /app/nego .
+COPY --from=builder /app/.env .
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs
 
 EXPOSE 80
 EXPOSE 8081
 
-VOLUME ["/cert-cache"]
+VOLUME ["/cert-cache"] 
 
-CMD ["./nego -port 8081 -prod"]
+# RUN chmod +x .env
+
+# ENTRYPOINT ["/app"]
+CMD ["./nego", "-port", "8081" ,"-prod"]
 

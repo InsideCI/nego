@@ -23,7 +23,7 @@ func main() {
 	prod := flag.Bool("prod", constants.DefaultFlagTLS, "SQL debug switch.")
 	flag.Parse()
 
-	if err := godotenv.Load("app.env"); err != nil {
+	if err := godotenv.Load(".env"); err != nil {
 		panic("You must provide a .env config file. Instructions at README.")
 	}
 	//TODO: check if JWT key was set.
