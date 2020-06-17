@@ -17,4 +17,4 @@ nego
 /.idea/
 
 # Sensitive data
-/cert-cache
+cert-cache
