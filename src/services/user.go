@@ -7,7 +7,6 @@ import (
 	"github.com/InsideCI/nego/src/driver"
 	"github.com/InsideCI/nego/src/models"
 	"github.com/InsideCI/nego/src/repositories"
-	"github.com/InsideCI/nego/src/utils/constants"
 	"github.com/InsideCI/nego/src/utils/exceptions"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -26,7 +25,7 @@ func NewUserService() *UserService {
 
 //Register creates a new user.
 func (s *UserService) Register(db *driver.DB, user *models.User) error {
-	if user.Token == os.Getenv(constants.RegistrationKey) {
+	if user.Token == os.Getenv("REG_KEY") {
 		// The user has a valid registraton token.
 		if !s.repo.ExistsByEmail(db.Postgres, user.Email) {
 			hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), 8)
