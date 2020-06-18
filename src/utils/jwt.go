@@ -29,7 +29,7 @@ func NewJWT() *JWT {
 func (j *JWT) Encode(email string) string {
 	claims := jwt.MapClaims{
 		j.tokenClaim: email,
-		"exp":        time.Now().Add(time.Hour * time.Duration(1)).Unix(),
+		"exp":        time.Now().Add(time.Hour * time.Duration(constants.JwtTokenExpireTime)).Unix(),
 		"iat":        time.Now().Unix(),
 	}
 

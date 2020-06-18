@@ -18,6 +18,7 @@ var (
 	LimitFastFetch = 5
 
 	// AUTH
-	RegistrationKey = os.Getenv("REG_KEY")
-	JwtTokenKey     = os.Getenv("JWT_TKN")
+	RegistrationKey    = os.Getenv("REG_KEY")
+	JwtTokenKey        = os.Getenv("JWT_TKN")
+	JwtTokenExpireTime = 5 // in hours
 )
